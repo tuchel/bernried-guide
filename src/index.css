@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
+/* Design tokens — a calm lake-and-alpine palette. */
+@theme {
+  --color-lake-50: #eff8fb;
+  --color-lake-100: #d6edf4;
+  --color-lake-200: #b0dbe9;
+  --color-lake-300: #7cc1d8;
+  --color-lake-400: #469fbf;
+  --color-lake-500: #2b82a5;
+  --color-lake-600: #266a8b;
+  --color-lake-700: #245772;
+  --color-lake-800: #24495e;
+  --color-lake-900: #223e50;
+  --color-alpine-500: #5a7d5a;
+  --color-meadow-500: #7a9e3f;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #1f2933;
+  background: #f6f7f5;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Keep the MapLibre attribution legible but unobtrusive. */
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+}
+
+/* --- Place markers (HTML, so emoji render reliably) --- */
+.place-marker {
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.place-marker .pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+  line-height: 1;
+}
+.place-marker.is-standout .pin {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  box-shadow: 0 0 0 2px #f2c14e, 0 1px 5px rgba(0, 0, 0, 0.4);
+}
+.place-marker.is-home .pin {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  background: #24495e;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.45);
+}
+.place-marker:hover {
+  transform: scale(1.14);
+  z-index: 5;
+}
+.place-marker.is-selected {
+  z-index: 6;
+}
+.place-marker.is-selected .pin {
+  box-shadow: 0 0 0 3px #2b82a5, 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: scale(1.16);
+}

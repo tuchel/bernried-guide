@@ -1,0 +1,53 @@
+{
+  "intro": "How quiet and secluded is this specific spot — and what's the trade-off? The house sits in Hapberg, a small hamlet south of the village, against the protected Bernrieder Park. That buys real peace, but it also means daily errands are a short drive, not a walk. Both sides below.",
+  "facts": [
+    {
+      "label": "Setting",
+      "value": "Edge of a protected landscape",
+      "detail": "The property borders the Bernrieder Park Landschaftsschutzgebiet — a conservation area that can't be built up — and the listing notes it sits well back from the road in a naturalistic plot. The view and quiet are durable, not dependent on a neighbor's goodwill.",
+      "source": { "title": "Sales exposé (HS 1809) — Lagebeschreibung", "url": "" }
+    },
+    {
+      "label": "Village size",
+      "value": "~2,400 residents",
+      "detail": "Bernried is a small lake community in Landkreis Weilheim-Schongau with an intact local life — quiet, but not deserted.",
+      "source": { "title": "Gemeinde Bernried", "url": "https://bernried.de/" }
+    },
+    {
+      "label": "Lake & nature on foot",
+      "value": "A few minutes' walk",
+      "detail": "The west shore, the Strandbad and the Bernrieder Park beech woods are walkable from the house — the everyday outdoors is genuinely on the doorstep.",
+      "source": { "title": "starnbergersee.de — Bernried", "url": "https://www.starnbergersee.de/orte/bernried.html" }
+    },
+    {
+      "label": "Rail noise",
+      "value": "Low — hourly service",
+      "detail": "The single-track Kochelseebahn passes ~0.9 km west of the house, but service is only ~hourly and ends at night, so train noise is occasional rather than constant.",
+      "source": { "title": "Wikipedia — Kochelseebahn", "url": "https://de.wikipedia.org/wiki/Kochelseebahn" }
+    },
+    {
+      "label": "The seclusion cost: daily errands",
+      "value": "A 5–8 min drive, not a walk",
+      "detail": "This is the honest downside. Bernried has a Netto, a bakery and a farm shop, but NO full supermarket, NO pharmacy and NO pediatrician — those are in Seeshaupt (~5 min) and Tutzing (~8 min). Coming from a walkable LA neighborhood, expect to drive for routine errands.",
+      "source": { "title": "See the Family essentials & Daily life layers", "url": "" }
+    },
+    {
+      "label": "On your own street",
+      "value": "School, Kita & vet within minutes",
+      "detail": "The flip side of seclusion: the German Grundschule is on Reitweg itself (~2 min walk), a Kinderhaus/Krippe and a village vet are minutes away. The essentials closest to children are the closest of all.",
+      "source": { "title": "Gemeinde Bernried", "url": "https://bernried.de/" }
+    },
+    {
+      "label": "Night sky",
+      "value": "Rural, dark",
+      "detail": "Away from city light, with a conservation area alongside — meaningfully darker skies than Highland Park.",
+      "source": { "title": "", "url": "" }
+    },
+    {
+      "label": "Winters",
+      "value": "Real, but well-served",
+      "detail": "Expect cold, snowy Bavarian winters (a big change from LA). Roads and the train run through it, indoor pools and sledding hills are close, and the lake region is set up for the season.",
+      "source": { "title": "", "url": "" }
+    }
+  ]
+}

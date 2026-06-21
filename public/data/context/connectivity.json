@@ -1,0 +1,53 @@
+{
+  "intro": "How connected is the house, really? We independently checked the listing's claims against transit and routing sources. The short answer: better than the brochure suggests — a direct hourly train reaches central Munich in well under an hour, and the airport is a straightforward drive.",
+  "facts": [
+    {
+      "label": "To central Munich by train",
+      "value": "~36–39 min, direct",
+      "detail": "A direct RB66 regional train (Kochelseebahn, DB Regio) runs Bernried → München Hbf hourly — no transfer needed. The exposé framed this as a ~60-min bus+rail trip; it is in fact a single ~39-min ride.",
+      "source": { "title": "Gemeinde Bernried — Verkehrsanbindung", "url": "https://bernried.de/de/buerger-und-gaeste/verkehrsanbindung" }
+    },
+    {
+      "label": "Train frequency",
+      "value": "Hourly (½-hourly at peak)",
+      "detail": "The Kochelseebahn (Tutzing–Penzberg–Kochel) runs roughly hourly, densified to half-hourly on the Tutzing–Penzberg section at peak times.",
+      "source": { "title": "Wikipedia — Kochelseebahn", "url": "https://de.wikipedia.org/wiki/Kochelseebahn" }
+    },
+    {
+      "label": "Walk / bike to Bernried station",
+      "value": "~14 min walk · ~4 min bike",
+      "detail": "Bernried(Starnberger See) station is ~0.9 km from the house, reachable on foot or by bike — no car needed to catch the train.",
+      "source": { "title": "Wikipedia — Bernried station", "url": "https://en.wikipedia.org/wiki/Bernried_station" }
+    },
+    {
+      "label": "To Munich Airport (MUC)",
+      "value": "~60 min by car (~84 km)",
+      "detail": "Free-flow driving is ~58–65 min via A95 → A99 → A92 (the brochure's '99 min' is a heavy-traffic worst case). By public transit it's ~1 h 40 with 1–2 transfers, since the airport sits on the far NE side of Munich.",
+      "source": { "title": "Rome2Rio — Bernried → MUC", "url": "https://www.rome2rio.com/s/Bernried-am-Starnberger-See/Munich-Airport-MUC" }
+    },
+    {
+      "label": "Nearest Autobahn (A95)",
+      "value": "~13 km · ~17 min",
+      "detail": "The A95 (Munich–Garmisch) is reached at the Seeshaupt junction (AS 7), putting both Munich and the Alps on a fast road.",
+      "source": { "title": "A95 junction list — autobahnatlas", "url": "http://www.autobahnatlas-online.de/A95.htm" }
+    },
+    {
+      "label": "Neighboring towns by train",
+      "value": "Tutzing ~8 · Seeshaupt ~5 · Penzberg ~13 min",
+      "detail": "Direct RB66 stops. Tutzing is the everyday hub (big supermarket, schools, sailing); Seeshaupt is the nearest pharmacy and pediatrician. Starnberg and Weilheim need a change at Tutzing.",
+      "source": { "title": "Wikipedia — Kochelseebahn", "url": "https://de.wikipedia.org/wiki/Kochelseebahn" }
+    },
+    {
+      "label": "To the Alps by car",
+      "value": "Kochel/Walchensee ~35 min · Garmisch ~55 min",
+      "detail": "Down the A95: the Kochelsee/Walchensee lake-and-ski area in ~30–45 min, Garmisch-Partenkirchen in ~50–60 min. Weekend mountains are genuinely close.",
+      "source": { "title": "starnbergersee.de — Bernried", "url": "https://www.starnbergersee.de/orte/bernried.html" }
+    },
+    {
+      "label": "Regional bus (MVV 948)",
+      "value": "Weekday-only, sparse",
+      "detail": "Line 948 (Penzberg–Seeshaupt–Bernried–Tutzing) serves the village but is school-oriented, Mon–Fri, no weekends. The train is the useful link.",
+      "source": { "title": "MVV line 948 timetable", "url": "https://www.penzberg.de/fileadmin/user_upload/pdfs/oepnv/Regionalbus_2024/mvv_948_Penzberg_Seeshaupt_Tutzing_Penzberg.pdf" }
+    }
+  ]
+}

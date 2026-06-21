@@ -1,0 +1,295 @@
+{
+  "cafe-buffi": {
+    "lat": 47.8725827,
+    "lng": 11.2886093
+  },
+  "hotel-seeblick": {
+    "lat": 47.8676336,
+    "lng": 11.292506
+  },
+  "drei-rosen": {
+    "lat": 47.8658564,
+    "lng": 11.2929833
+  },
+  "nordbad-seerestaurant": {
+    "lat": 47.9157994,
+    "lng": 11.2887763
+  },
+  "forsthaus-ilkahoehe": {
+    "lat": 47.8991555,
+    "lng": 11.2549109
+  },
+  "marina-seerestaurant": {
+    "lat": 47.8697482,
+    "lng": 11.2926014
+  },
+  "undosa-starnberg": {
+    "lat": 47.9940671,
+    "lng": 11.3402404
+  },
+  "kloster-andechs": {
+    "lat": 47.974662,
+    "lng": 11.1826251
+  },
+  "midgardhaus": {
+    "lat": 47.9140491,
+    "lng": 11.2882736
+  },
+  "wuermseestueberl": {
+    "lat": 47.8258287,
+    "lng": 11.3020283
+  },
+  "buchscharner-seewirt": {
+    "lat": 47.8449049,
+    "lng": 11.3381033
+  },
+  "bali-beach": {
+    "lat": 47.8680843,
+    "lng": 11.293911
+  },
+  "netto-bernried": {
+    "lat": 47.8573024,
+    "lng": 11.2826087
+  },
+  "baeckerei-ziegler": {
+    "lat": 47.8675094,
+    "lng": 11.2935243
+  },
+  "bernrieder-hofladen": {
+    "lat": 47.8684775,
+    "lng": 11.2922554
+  },
+  "edeka-tutzing": {
+    "lat": 47.9163719,
+    "lng": 11.2851985
+  },
+  "edeka-seeshaupt": {
+    "lat": 47.8243333,
+    "lng": 11.3029282
+  },
+  "wochenmarkt-starnberg": {
+    "lat": 47.9981264,
+    "lng": 11.3419998
+  },
+  "wochenmarkt-tutzing": null,
+  "spielplatz-brahmspromenade": {
+    "lat": 47.9130748,
+    "lng": 11.2858217
+  },
+  "spielplatz-herrsching": {
+    "lat": 47.9962958,
+    "lng": 11.1675385
+  },
+  "spielplatz-pointstrasse": {
+    "lat": 47.8658288,
+    "lng": 11.2822736
+  },
+  "spielplatz-seepromenade-starnberg": {
+    "lat": 47.9928209,
+    "lng": 11.3392549
+  },
+  "bernrieder-park": {
+    "lat": 47.8581383,
+    "lng": 11.2963127
+  },
+  "hoehenried-park": null,
+  "ilkahoehe": {
+    "lat": 47.9021819,
+    "lng": 11.249195
+  },
+  "maisinger-see": {
+    "lat": 47.9781852,
+    "lng": 11.2763767
+  },
+  "gut-aiderbichl": {
+    "lat": 47.7988607,
+    "lng": 11.3098605
+  },
+  "tierpark-hellabrunn": {
+    "lat": 48.0962811,
+    "lng": 11.5541969
+  },
+  "wildpark-poing": {
+    "lat": 48.1741487,
+    "lng": 11.8342471
+  },
+  "heiss-hof": {
+    "lat": 47.9051961,
+    "lng": 11.2192216
+  },
+  "starnberger-eiswerkstatt": {
+    "lat": 47.9983393,
+    "lng": 11.3420041
+  },
+  "gelatok-junior": {
+    "lat": 47.9076351,
+    "lng": 11.2742639
+  },
+  "allora-signora": {
+    "lat": 47.824669,
+    "lng": 11.3030324
+  },
+  "da-noi": {
+    "lat": 47.8248503,
+    "lng": 11.301688
+  },
+  "garibaldi": null,
+  "mille-lire": {
+    "lat": 47.9105459,
+    "lng": 11.2809129
+  },
+  "strandbad-hubl": null,
+  "strandbad-tutzing-sued": {
+    "lat": 47.8967641,
+    "lng": 11.2746949
+  },
+  "strandbad-seeshaupt": null,
+  "piorama-penzberg": {
+    "lat": 47.7585224,
+    "lng": 11.3720244
+  },
+  "wasserpark-starnberg": {
+    "lat": 47.9985402,
+    "lng": 11.3538406
+  },
+  "hubl-fishing": null,
+  "seenschifffahrt-bernried": null,
+  "bootsverleih-hubl": null,
+  "segelschule-tutzing": {
+    "lat": 47.9110024,
+    "lng": 11.283449
+  },
+  "segelschule-starnberg": {
+    "lat": 47.9110024,
+    "lng": 11.283449
+  },
+  "hofgut-bernried": {
+    "lat": 47.8696666,
+    "lng": 11.2866165
+  },
+  "lothhof": {
+    "lat": 47.9040712,
+    "lng": 11.3759436
+  },
+  "buchheim-museum": {
+    "lat": 47.8727646,
+    "lng": 11.2884503
+  },
+  "marcello-funarena": null,
+  "hochseilgarten-utting": {
+    "lat": 48.0299827,
+    "lng": 11.0944557
+  },
+  "minigolf-tutzing": {
+    "lat": 47.8981988,
+    "lng": 11.2727775
+  },
+  "buecherei-tutzing": {
+    "lat": 47.9105538,
+    "lng": 11.2769818
+  },
+  "deutsches-museum": {
+    "lat": 48.1300409,
+    "lng": 11.582909
+  },
+  "englischer-garten": {
+    "lat": 48.164861,
+    "lng": 11.6064042
+  },
+  "olympiapark": {
+    "lat": 48.1687059,
+    "lng": 11.5503638
+  },
+  "walchensee": {
+    "lat": 47.5963611,
+    "lng": 11.3178243
+  },
+  "blomberg": {
+    "lat": 47.7438036,
+    "lng": 11.5690814
+  },
+  "partnachklamm": {
+    "lat": 47.4646488,
+    "lng": 11.1221206
+  },
+  "zugspitze-eibsee": {
+    "lat": 47.4389554,
+    "lng": 10.9888067
+  },
+  "mis-buchhof": {
+    "lat": 48.0007648,
+    "lng": 11.3831612
+  },
+  "createschools-tutzing": {
+    "lat": 47.8965252,
+    "lng": 11.2645817
+  },
+  "grundschule-bernried": {
+    "lat": 47.8644502,
+    "lng": 11.2947274
+  },
+  "gymnasium-tutzing": {
+    "lat": 47.9074104,
+    "lng": 11.2798755
+  },
+  "montessori-biberkor": {
+    "lat": 47.9468223,
+    "lng": 11.3799538
+  },
+  "kinderhaus-bernried": {
+    "lat": 47.8644868,
+    "lng": 11.293994
+  },
+  "krippe-kloster-bernried": {
+    "lat": 47.8664074,
+    "lng": 11.2961938
+  },
+  "waldkinder-bernried": {
+    "lat": 47.8656192,
+    "lng": 11.2796661
+  },
+  "kinderhaus-seeshaupt": {
+    "lat": 47.8242004,
+    "lng": 11.2990834
+  },
+  "klinikum-starnberg": {
+    "lat": 48.0066449,
+    "lng": 11.333844
+  },
+  "krankenhaus-weilheim": {
+    "lat": 47.8369158,
+    "lng": 11.1440451
+  },
+  "klinikum-penzberg": {
+    "lat": 47.7546266,
+    "lng": 11.3757284
+  },
+  "haunersches-munich": {
+    "lat": 48.1302821,
+    "lng": 11.5592053
+  },
+  "kinderarzt-seeshaupt": {
+    "lat": 47.8231352,
+    "lng": 11.2996807
+  },
+  "kinderarzt-indlekofer": {
+    "lat": 47.9084844,
+    "lng": 11.2765666
+  },
+  "apotheke-seeshaupt": {
+    "lat": 47.8246734,
+    "lng": 11.3009926
+  },
+  "apotheke-tutzing": {
+    "lat": 47.9108752,
+    "lng": 11.2806095
+  },
+  "vet-droste-bernried": {
+    "lat": 47.8614702,
+    "lng": 11.2846642
+  },
+  "tierklinik-starnberg": {
+    "lat": 48.0067953,
+    "lng": 11.3492818
+  }
+}
