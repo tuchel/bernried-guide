@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
+import { APIProvider } from '@vis.gl/react-google-maps'
 import { MapView } from './components/MapView'
+import { MapViewGoogle } from './components/MapViewGoogle'
 import { FilterBar } from './components/FilterBar'
 import { DetailPanel } from './components/DetailPanel'
 import { Legend } from './components/Legend'
@@ -24,6 +26,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [lens, setLens] = useState<LensId | null>(null)
+
+  const hasGoogle = Boolean(GOOGLE_MAPS_API_KEY)
 
   const counts = useMemo(() => {
     const c: Partial<Record<CategoryId, number>> = {}
@@ -70,7 +74,7 @@ export default function App() {
     { id: 'family', label: '👨‍👩‍👧 Family' },
   ]
 
-  return (
+  const ui = (
     <div className="flex h-full flex-col">
       <header className="z-20 border-b border-black/10 bg-lake-800 text-white shadow-sm">
         <div className="flex items-center justify-between gap-3 px-4 py-2.5">
@@ -110,14 +114,25 @@ export default function App() {
 
         {/* Map */}
         <main className="relative flex-1">
-          <MapView
-            places={list}
-            activeCategories={activeCategories}
-            mode={mode}
-            bands={bands}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-          />
+          {hasGoogle ? (
+            <MapViewGoogle
+              places={list}
+              activeCategories={activeCategories}
+              mode={mode}
+              bands={bands}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
+          ) : (
+            <MapView
+              places={list}
+              activeCategories={activeCategories}
+              mode={mode}
+              bands={bands}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
+          )}
 
           {mode && <Legend mode={mode} bands={bands} />}
 
@@ -130,7 +145,11 @@ export default function App() {
           {/* Detail panel: right card on desktop, bottom sheet on mobile */}
           {selected && (
             <div className="absolute inset-x-0 bottom-0 z-20 max-h-[55%] rounded-t-2xl bg-white shadow-2xl sm:inset-x-auto sm:right-3 sm:top-3 sm:bottom-3 sm:max-h-none sm:w-80 sm:rounded-xl">
-              <DetailPanel place={selected} onClose={() => setSelectedId(null)} />
+              <DetailPanel
+                place={selected}
+                onClose={() => setSelectedId(null)}
+                showLive={hasGoogle}
+              />
             </div>
           )}
         </main>
@@ -158,5 +177,13 @@ export default function App() {
         {lens && <LensPanel lens={lens} places={list} onClose={() => setLens(null)} />}
       </div>
     </div>
+  )
+
+  return hasGoogle ? (
+    <APIProvider apiKey={GOOGLE_MAPS_API_KEY as string} libraries={['places', 'marker']}>
+      {ui}
+    </APIProvider>
+  ) : (
+    ui
   )
 }

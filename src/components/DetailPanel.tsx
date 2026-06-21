@@ -1,5 +1,6 @@
 import type { Place } from '../types'
 import { CATEGORIES, HOME } from '../config'
+import { GooglePlaceContent } from './GooglePlaceContent'
 
 function googleMapsUrl(place: Place): string {
   const query = encodeURIComponent(place.googleQuery || `${place.name}, ${place.town}`)
@@ -13,7 +14,15 @@ function directionsUrl(place: Place): string {
   return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}`
 }
 
-export function DetailPanel({ place, onClose }: { place: Place; onClose: () => void }) {
+export function DetailPanel({
+  place,
+  onClose,
+  showLive = false,
+}: {
+  place: Place
+  onClose: () => void
+  showLive?: boolean
+}) {
   const meta = CATEGORIES[place.category]
   return (
     <div className="flex h-full flex-col overflow-y-auto">
@@ -59,7 +68,7 @@ export function DetailPanel({ place, onClose }: { place: Place; onClose: () => v
           </div>
         )}
 
-        {/* Live Google photos/reviews mount here once an API key + place_id exist. */}
+        {showLive && <GooglePlaceContent key={place.id} place={place} />}
 
         <div className="flex flex-wrap gap-2 pt-1">
           <a
