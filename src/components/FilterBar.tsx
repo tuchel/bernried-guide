@@ -1,5 +1,6 @@
 import type { Band, CategoryId, TransportMode } from '../types'
 import {
+  BAND_COLOR,
   BANDS,
   CATEGORIES,
   CATEGORY_GROUPS,
@@ -75,7 +76,7 @@ export function FilterBar({
                       ? 'border-transparent text-white'
                       : 'border-gray-300 bg-white text-gray-600'
                   }`}
-                  style={on ? { background: MODES[mode].color } : undefined}
+                  style={on ? { background: BAND_COLOR[b] } : undefined}
                 >
                   {b} min
                 </button>

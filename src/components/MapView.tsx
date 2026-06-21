@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import type { Band, CategoryId, Place, TransportMode } from '../types'
-import { BAND_OPACITY, CATEGORIES, HOME, MAP_DEFAULTS, MODES } from '../config'
+import { BAND_COLOR, CATEGORIES, HOME, MAP_DEFAULTS } from '../config'
 import { isochroneUrl } from '../lib/data'
 
 const STYLE_URL = 'https://tiles.openfreemap.org/styles/liberty'
@@ -147,9 +147,9 @@ export function MapView({
       // Remove unwanted layers + sources.
       for (const key of [...live]) {
         if (!desired.includes(key)) {
-          const fill = `iso-fill-${key}`
+          const casing = `iso-casing-${key}`
           const line = `iso-line-${key}`
-          if (map.getLayer(fill)) map.removeLayer(fill)
+          if (map.getLayer(casing)) map.removeLayer(casing)
           if (map.getLayer(line)) map.removeLayer(line)
           if (map.getSource(`iso-${key}`)) map.removeSource(`iso-${key}`)
           live.delete(key)
@@ -165,24 +165,20 @@ export function MapView({
         const band = Number(bStr) as Band
         const src = `iso-${key}`
         map.addSource(src, { type: 'geojson', data: isochroneUrl(m, band) })
+        // White casing under the colored boundary for legibility over busy tiles.
         map.addLayer({
-          id: `iso-fill-${key}`,
-          type: 'fill',
+          id: `iso-casing-${key}`,
+          type: 'line',
           source: src,
-          paint: {
-            'fill-color': MODES[m as TransportMode].color,
-            'fill-opacity': BAND_OPACITY[band],
-          },
+          layout: { 'line-join': 'round' },
+          paint: { 'line-color': '#ffffff', 'line-width': 5, 'line-opacity': 0.7 },
         })
         map.addLayer({
           id: `iso-line-${key}`,
           type: 'line',
           source: src,
-          paint: {
-            'line-color': MODES[m as TransportMode].color,
-            'line-width': 1.2,
-            'line-opacity': 0.5,
-          },
+          layout: { 'line-join': 'round' },
+          paint: { 'line-color': BAND_COLOR[band], 'line-width': 3, 'line-opacity': 0.95 },
         })
         live.add(key)
       }

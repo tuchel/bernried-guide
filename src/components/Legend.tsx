@@ -1,5 +1,5 @@
 import type { Band, TransportMode } from '../types'
-import { BAND_OPACITY, BANDS, MODES } from '../config'
+import { BAND_COLOR, BANDS, MODES } from '../config'
 
 export function Legend({ mode, bands }: { mode: TransportMode; bands: Set<Band> }) {
   const meta = MODES[mode]
@@ -13,8 +13,8 @@ export function Legend({ mode, bands }: { mode: TransportMode; bands: Set<Band> 
         {shown.map((b) => (
           <div key={b} className="flex items-center gap-2">
             <span
-              className="inline-block h-3 w-5 rounded-sm border border-black/10"
-              style={{ background: meta.color, opacity: BAND_OPACITY[b] + 0.25 }}
+              className="inline-block w-6"
+              style={{ height: 0, borderTop: `3px solid ${BAND_COLOR[b]}` }}
             />
             <span className="text-gray-600">within {b} min</span>
           </div>

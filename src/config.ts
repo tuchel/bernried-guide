@@ -71,5 +71,9 @@ export const MODES: Record<TransportMode, ModeMeta> = {
 
 export const BANDS: Band[] = [10, 30, 60]
 
-/** Opacity per band — inner (short) bands read stronger. */
-export const BAND_OPACITY: Record<Band, number> = { 10: 0.38, 30: 0.24, 60: 0.13 }
+/** Traffic-light boundary colors per time band: green = quick, red = far edge. */
+export const BAND_COLOR: Record<Band, string> = {
+  10: '#16a34a', // green
+  30: '#f59e0b', // amber
+  60: '#dc2626', // red
+}

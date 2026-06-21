@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { AdvancedMarker, Map, useMap } from '@vis.gl/react-google-maps'
 import type { Band, CategoryId, Place, TransportMode } from '../types'
-import { BAND_OPACITY, CATEGORIES, GOOGLE_MAP_ID, HOME, MAP_DEFAULTS, MODES } from '../config'
+import { BAND_COLOR, CATEGORIES, GOOGLE_MAP_ID, HOME, MAP_DEFAULTS } from '../config'
 import { isochroneUrl } from '../lib/data'
 
 interface Props {
@@ -23,14 +23,12 @@ function GoogleIsochrones({ mode, bands }: { mode: TransportMode | null; bands: 
     const data = new google.maps.Data()
     data.setMap(map)
     data.setStyle((f) => {
-      const m = f.getProperty('mode') as TransportMode
       const b = f.getProperty('band') as Band
       return {
-        fillColor: MODES[m]?.color ?? '#2b82a5',
-        fillOpacity: BAND_OPACITY[b] ?? 0.2,
-        strokeColor: MODES[m]?.color ?? '#2b82a5',
-        strokeOpacity: 0.5,
-        strokeWeight: 1,
+        fillOpacity: 0, // boundary line only — no shaded region
+        strokeColor: BAND_COLOR[b] ?? '#2b82a5',
+        strokeOpacity: 0.95,
+        strokeWeight: 3,
         clickable: false,
       }
     })
