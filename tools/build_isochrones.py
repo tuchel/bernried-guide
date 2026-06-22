@@ -25,14 +25,14 @@ from shapely.ops import transform as shp_transform
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "public" / "data" / "isochrones"
 HOME = (47.8606705, 11.2919095)  # lat, lng
-BANDS = [10, 30, 60]
+BANDS = [5, 10, 15, 30, 45, 60]
 
 # network_type, uniform speed (km/h) or None to use OSM maxspeed, download radius (m)
 MODES = {
     "walk": ("walk", 4.8, 6500),
-    "bike": ("bike", 15.0, 20000),
+    "bike": ("bike", 16.0, 20000),
     "ebike": ("bike", 19.0, 26000),
-    "drive": ("drive", None, 80000),
+    "drive": ("drive", None, 80000),  # free-flow from OSM maxspeeds — matches Google directions
 }
 HULL_RATIO = 0.35  # lower = tighter/jaggier concave hull
 

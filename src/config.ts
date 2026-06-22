@@ -69,11 +69,14 @@ export const MODES: Record<TransportMode, ModeMeta> = {
   transit: { label: 'Transit', emoji: '🚆', color: '#9b5de5', note: 'Train + bus, weekday morning' },
 }
 
-export const BANDS: Band[] = [10, 30, 60]
+export const BANDS: Band[] = [5, 10, 15, 30, 45, 60]
 
-/** Traffic-light boundary colors per time band: green = quick, red = far edge. */
+/** Sequential green→red ramp by travel-time band: near = green, far = deep red. */
 export const BAND_COLOR: Record<Band, string> = {
-  10: '#16a34a', // green
-  30: '#f59e0b', // amber
-  60: '#dc2626', // red
+  5: '#16a34a', // green
+  10: '#65a30d', // lime
+  15: '#ca8a04', // gold
+  30: '#ea580c', // orange
+  45: '#dc2626', // red
+  60: '#7f1d1d', // deep red
 }

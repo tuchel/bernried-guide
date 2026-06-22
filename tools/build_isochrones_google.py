@@ -57,7 +57,7 @@ KEY = os.environ.get("GOOGLE_MAPS_API_KEY") or os.environ.get("VITE_GOOGLE_MAPS_
 # The key is HTTP-referrer restricted; send an allowed referrer for build-time calls.
 REFERER = os.environ.get("BUILD_REFERER", "https://tuchel.github.io/bernried-guide/")
 
-BANDS = [10, 30, 60]
+BANDS = [5, 10, 15, 30, 45, 60]
 # app mode → Google travelMode. Bike is intentionally EXCLUDED: Google's Isochrones
 # API (Preview) BICYCLE profile models a conservative ~10–12 km/h on roads — far
 # slower than Google Maps cycling directions (e.g. Bernried→Tutzing 7.7 km in 24 min,
@@ -89,7 +89,10 @@ def generate(mode: str, gmode: str, band: int) -> None:
         "polygonFidelity": "HIGH",
     }
     if gmode == "DRIVE":
-        body["routingPreference"] = "TRAFFIC_AWARE"
+        # Free-flow: the TRAFFIC_AWARE isochrone is conservative vs Google's own driving
+        # directions (which here showed "lighter traffic than usual"). Free-flow matches
+        # the off-peak reality of this rural area and the times the user sees in Maps.
+        body["routingPreference"] = "TRAFFIC_UNAWARE"
     req = urllib.request.Request(
         ENDPOINT,
         data=json.dumps(body).encode(),

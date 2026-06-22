@@ -26,7 +26,7 @@ export default function App() {
     () => new Set(DEFAULT_ON),
   )
   const [mode, setMode] = useState<TransportMode | null>(null)
-  const [bands, setBands] = useState<Set<Band>>(() => new Set<Band>([10, 30, 60]))
+  const [bands, setBands] = useState<Set<Band>>(() => new Set<Band>([5, 10, 15, 30, 45, 60]))
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [lens, setLens] = useState<LensId | null>(null)

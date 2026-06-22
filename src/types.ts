@@ -27,7 +27,7 @@ export type CategoryId =
 
 export type TransportMode = 'walk' | 'bike' | 'ebike' | 'drive' | 'transit'
 
-export type Band = 10 | 30 | 60
+export type Band = 5 | 10 | 15 | 30 | 45 | 60
 
 export interface Place {
   id: string

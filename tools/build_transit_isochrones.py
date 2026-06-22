@@ -40,7 +40,6 @@ STATIONS = [
     ("Kochel", 47.6602, 11.3640, 55),
     ("München Hbf", 48.1402, 11.5586, 55),
 ]
-HOME_WALK_M = 850   # ~10-min walkshed around the house (to reach the platform)
 STATION_WALK_M = 700  # walk-out radius at a destination station
 
 
@@ -51,12 +50,13 @@ def buffered_deg(lat: float, lng: float, radius_m: float):
 
 def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
-    for band in (10, 30, 60):
-        parts = [buffered_deg(HOME[0], HOME[1], HOME_WALK_M)]
-        if band >= 30:
-            for _, lat, lng, mins in STATIONS:
-                if mins <= band:
-                    parts.append(buffered_deg(lat, lng, STATION_WALK_M))
+    for band in (5, 10, 15, 30, 45, 60):
+        # Home walkshed grows with the band but caps ~1 km (you'd walk ≤15 min to a station).
+        home_walk = min(band, 15) * 70
+        parts = [buffered_deg(HOME[0], HOME[1], home_walk)]
+        for _, lat, lng, mins in STATIONS:
+            if mins <= band:
+                parts.append(buffered_deg(lat, lng, STATION_WALK_M))
         poly = unary_union(parts)
         fc = {
             "type": "FeatureCollection",
