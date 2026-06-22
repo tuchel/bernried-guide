@@ -1,7 +1,11 @@
-import { useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { APIProvider } from '@vis.gl/react-google-maps'
 import { MapView } from './components/MapView'
 import { MapViewGoogle } from './components/MapViewGoogle'
+
+const AnalysisPage = lazy(() =>
+  import('./analysis/AnalysisPage').then((m) => ({ default: m.AnalysisPage })),
+)
 import { FilterBar } from './components/FilterBar'
 import { DetailPanel } from './components/DetailPanel'
 import { Legend } from './components/Legend'
@@ -28,6 +32,13 @@ export default function App() {
   const [lens, setLens] = useState<LensId | null>(null)
 
   const hasGoogle = Boolean(GOOGLE_MAPS_API_KEY)
+
+  const [route, setRoute] = useState(() => window.location.hash)
+  useEffect(() => {
+    const onHash = () => setRoute(window.location.hash)
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
   const counts = useMemo(() => {
     const c: Partial<Record<CategoryId, number>> = {}
@@ -74,6 +85,14 @@ export default function App() {
     { id: 'family', label: '👨‍👩‍👧 Family' },
   ]
 
+  if (route === '#analysis') {
+    return (
+      <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading analysis…</div>}>
+        <AnalysisPage onBack={() => (window.location.hash = '')} />
+      </Suspense>
+    )
+  }
+
   const ui = (
     <div className="flex h-full flex-col">
       <header className="z-20 border-b border-black/10 bg-lake-800 text-white shadow-sm">
@@ -96,6 +115,12 @@ export default function App() {
                 {b.label}
               </button>
             ))}
+            <button
+              onClick={() => (window.location.hash = 'analysis')}
+              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
+            >
+              📊 Analysis
+            </button>
             <button
               onClick={() => setFiltersOpen((v) => !v)}
               className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium hover:bg-white/20 lg:hidden"
