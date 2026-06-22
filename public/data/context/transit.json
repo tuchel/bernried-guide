@@ -1,0 +1,21 @@
+{
+  "assumption": "Times assume you arrive on schedule — no wait for your departure, and timed connections. The catch is frequency: if you're not timed to the train, add up to one headway of waiting.",
+  "access": "≈14 min walk (or ~4 min by bike) from the house to Bernried station — that's baked into every time below.",
+  "lines": [
+    {
+      "line": "RB66 · Kochelseebahn",
+      "headway": "~1×/hour",
+      "detail": "Direct Bernried ↔ Tutzing ↔ München Hbf (~36 min) and ↔ Kochel. Densified to ½-hourly Tutzing–Penzberg at peak."
+    },
+    {
+      "line": "S6 (change at Tutzing)",
+      "headway": "~3×/hour",
+      "detail": "Every 20 min Starnberg–Munich; from Tutzing the gap alternates 20/40 min. Reaches the lake S-Bahn stops and central Munich."
+    },
+    {
+      "line": "Bus 948",
+      "headway": "weekday only",
+      "detail": "School-oriented; no weekend service. The train is the useful link."
+    }
+  ]
+}

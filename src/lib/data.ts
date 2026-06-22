@@ -34,6 +34,13 @@ function useJson<T>(path: string): Loadable<T> {
   return state
 }
 
+export interface TransitInfo {
+  assumption: string
+  access: string
+  lines: { line: string; headway: string; detail: string }[]
+}
+
 export const usePlaces = () => useJson<Place[]>('data/places.json')
 export const useConnectivity = () => useJson<ConnectivityContext>('data/context/connectivity.json')
 export const useQuiet = () => useJson<QuietContext>('data/context/quiet.json')
+export const useTransit = () => useJson<TransitInfo>('data/context/transit.json')
