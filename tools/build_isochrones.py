@@ -19,8 +19,9 @@ import networkx as nx
 import osmnx as ox
 import shapely
 from pyproj import Transformer
-from shapely.geometry import MultiPoint, mapping
+from shapely.geometry import MultiPoint, Polygon, mapping
 from shapely.ops import transform as shp_transform
+from shapely.ops import unary_union
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "public" / "data" / "isochrones"
@@ -34,8 +35,20 @@ MODES = {
     "ebike": ("bike", 19.0, 26000),
     "drive": ("drive", None, 80000),  # free-flow from OSM maxspeeds — matches Google directions
 }
-HULL_RATIO = 0.12  # low = hull follows the dense boundary tightly (detail); rounding comes from the close
+HULL_RATIO = 0.45  # higher = smoother blob (consumer-isochrone look) rather than branchy road-arms
 INF = float("inf")
+MIN_ISLAND_AREA = 60_000  # m^2 (~245 m square): drop specks
+
+
+def clean(poly):
+    """A simple outer envelope: valid, no interior holes, no tiny islands — so the
+    boundary renders as clean nested rings, not a web of internal edges."""
+    poly = poly.buffer(0)  # repair self-intersections
+    parts = list(poly.geoms) if poly.geom_type == "MultiPolygon" else [poly]
+    parts = [Polygon(p.exterior) for p in parts if p.geom_type == "Polygon" and p.area >= MIN_ISLAND_AREA]
+    if not parts:
+        return None
+    return parts[0] if len(parts) == 1 else unary_union(parts)
 
 
 def add_travel_times(G, speed_kph):
@@ -71,10 +84,10 @@ def band_polygon(Gp, center, minutes, to_wgs):
             frac = min(1.0, remaining / tt)
             coords.append((ux + frac * (Gp.nodes[v]["x"] - ux), uy + frac * (Gp.nodes[v]["y"] - uy)))
     hull = shapely.concave_hull(MultiPoint(coords), ratio=HULL_RATIO)
-    # Round the tight hull into smooth arcs: expand-then-contract turns jagged corners
-    # into curves and fills small notches; the net +60 m keeps the reachable extent.
-    poly = hull.buffer(180, join_style=1).buffer(-120, join_style=1).simplify(12)
-    return None if poly.is_empty else shp_transform(to_wgs, poly)
+    # Bridge between nearby road-arms and round into a smooth envelope (expand-then-
+    # contract), then reduce to a clean outer ring — no interior edges, no branchy web.
+    poly = clean(hull.buffer(260, join_style=1).buffer(-220, join_style=1).simplify(18))
+    return None if (poly is None or poly.is_empty) else shp_transform(to_wgs, poly)
 
 
 def build_mode(mode: str, network_type: str, speed_kph, dist: int):
