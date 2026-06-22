@@ -58,7 +58,12 @@ KEY = os.environ.get("GOOGLE_MAPS_API_KEY") or os.environ.get("VITE_GOOGLE_MAPS_
 REFERER = os.environ.get("BUILD_REFERER", "https://tuchel.github.io/bernried-guide/")
 
 BANDS = [10, 30, 60]
-MODES = {"walk": "WALK", "bike": "BICYCLE", "drive": "DRIVE"}  # app mode → Google travelMode
+# app mode → Google travelMode. Bike is intentionally EXCLUDED: Google's Isochrones
+# API (Preview) BICYCLE profile models a conservative ~10–12 km/h on roads — far
+# slower than Google Maps cycling directions (e.g. Bernried→Tutzing 7.7 km in 24 min,
+# net-downhill ≈19 km/h), so it under-reaches. Bike + e-bike use OSMnx instead
+# (build_isochrones.py) at realistic speeds. Walk + drive (traffic-aware) stay Google.
+MODES = {"walk": "WALK", "drive": "DRIVE"}
 
 
 def extract_geometry(geojson: dict) -> dict:
