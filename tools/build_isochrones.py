@@ -34,7 +34,8 @@ MODES = {
     "ebike": ("bike", 19.0, 26000),
     "drive": ("drive", None, 80000),  # free-flow from OSM maxspeeds — matches Google directions
 }
-HULL_RATIO = 0.35  # lower = tighter/jaggier concave hull
+HULL_RATIO = 0.12  # low = hull follows the dense boundary tightly (detail); rounding comes from the close
+INF = float("inf")
 
 
 def add_travel_times(G, speed_kph):
@@ -49,14 +50,31 @@ def add_travel_times(G, speed_kph):
 
 
 def band_polygon(Gp, center, minutes, to_wgs):
-    sub = nx.ego_graph(Gp, center, radius=minutes * 60, distance="travel_time")
-    pts = MultiPoint([(d["x"], d["y"]) for _, d in sub.nodes(data=True)])
-    if pts.is_empty or len(sub) < 3:
+    budget = minutes * 60
+    times = nx.single_source_dijkstra_path_length(Gp, center, cutoff=budget, weight="travel_time")
+    if len(times) < 3:
         return None
-    hull = shapely.concave_hull(pts, ratio=HULL_RATIO)
-    # Close small gaps and smooth slightly (meters, projected CRS).
-    poly = hull.buffer(60).buffer(-25).simplify(15)
-    return shp_transform(to_wgs, poly)
+    coords = [(Gp.nodes[n]["x"], Gp.nodes[n]["y"]) for n in times]
+    # True isochrone boundary: interpolate the point on each edge leaving a reachable
+    # node where the time budget runs out. Densifies the boundary (smoother) and makes
+    # it follow the roads to where you actually stop (more accurate) — not back to the
+    # last junction.
+    for u, t_u in times.items():
+        ux, uy = Gp.nodes[u]["x"], Gp.nodes[u]["y"]
+        remaining = budget - t_u
+        for v in Gp.successors(u):
+            if times.get(v, INF) <= budget:
+                continue  # edge fully inside the reachable area
+            tt = min(d.get("travel_time", INF) for d in Gp.get_edge_data(u, v).values())
+            if not (0 < tt < INF):
+                continue
+            frac = min(1.0, remaining / tt)
+            coords.append((ux + frac * (Gp.nodes[v]["x"] - ux), uy + frac * (Gp.nodes[v]["y"] - uy)))
+    hull = shapely.concave_hull(MultiPoint(coords), ratio=HULL_RATIO)
+    # Round the tight hull into smooth arcs: expand-then-contract turns jagged corners
+    # into curves and fills small notches; the net +60 m keeps the reachable extent.
+    poly = hull.buffer(180, join_style=1).buffer(-120, join_style=1).simplify(12)
+    return None if poly.is_empty else shp_transform(to_wgs, poly)
 
 
 def build_mode(mode: str, network_type: str, speed_kph, dist: int):
