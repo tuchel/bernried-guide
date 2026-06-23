@@ -6,6 +6,7 @@ import { MapViewGoogle } from './components/MapViewGoogle'
 const AnalysisPage = lazy(() =>
   import('./analysis/AnalysisPage').then((m) => ({ default: m.AnalysisPage })),
 )
+const CostsPage = lazy(() => import('./costs/CostsPage').then((m) => ({ default: m.CostsPage })))
 import { FilterBar } from './components/FilterBar'
 import { DetailPanel } from './components/DetailPanel'
 import { Legend } from './components/Legend'
@@ -92,6 +93,13 @@ export default function App() {
       </Suspense>
     )
   }
+  if (route === '#costs') {
+    return (
+      <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading running costs…</div>}>
+        <CostsPage onBack={() => (window.location.hash = '')} />
+      </Suspense>
+    )
+  }
 
   const ui = (
     <div className="flex h-full flex-col">
@@ -120,6 +128,12 @@ export default function App() {
               className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
             >
               📊 Analysis
+            </button>
+            <button
+              onClick={() => (window.location.hash = 'costs')}
+              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
+            >
+              💶 Costs
             </button>
             <button
               onClick={() => setFiltersOpen((v) => !v)}
