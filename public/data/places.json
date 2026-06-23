@@ -4,8 +4,8 @@
     "name": "Café Buffi (Buchheim Museum)",
     "category": "restaurant",
     "town": "Bernried",
-    "lat": 47.872583,
-    "lng": 11.288609,
+    "lat": 47.872842,
+    "lng": 11.289004,
     "blurb": "Homemade cakes and a terrace inside the lakeside art park, with the Höhenried deer to roam to afterward.",
     "tags": [
       "lakeside",
@@ -14,15 +14,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Buchheim Museum, Am Hirschgarten 1, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJRfm2dlLInUcRMSsgaYGhayw"
   },
   {
     "id": "hotel-seeblick",
     "name": "Hotel Seeblick",
     "category": "restaurant",
     "town": "Bernried",
-    "lat": 47.867634,
-    "lng": 11.292506,
+    "lat": 47.867961,
+    "lng": 11.292295,
     "blurb": "The best-reviewed restaurant in the village — hearty Bavarian food and a big chestnut beer garden with room for kids.",
     "tags": [
       "bavarian",
@@ -31,15 +31,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Hotel Seeblick, Tutzinger Straße 9, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJy5SYl7LJnUcRAwGMF6gr4AM"
   },
   {
     "id": "drei-rosen",
     "name": "Landgasthof Drei Rosen",
     "category": "restaurant",
     "town": "Bernried",
-    "lat": 47.865856,
-    "lng": 11.292983,
+    "lat": 47.865837,
+    "lng": 11.293054,
     "blurb": "Beloved 17th-century village inn with home cooking and a casual garden (closed Mon & Wed).",
     "tags": [
       "bavarian",
@@ -48,15 +48,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Landgasthof Drei Rosen, Dorfstraße 11, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJYW_mvUjInUcRI6PDoM-W3VU"
   },
   {
     "id": "nordbad-seerestaurant",
     "name": "Nordbad Seerestaurant",
     "category": "restaurant",
     "town": "Tutzing",
-    "lat": 47.915799,
-    "lng": 11.288776,
+    "lat": 47.915817,
+    "lng": 11.288693,
     "blurb": "Open-air dining literally on the water, with a sandpit to keep the little ones busy.",
     "tags": [
       "lakeside",
@@ -65,15 +65,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Seerestaurant Nordbad, Nordbadstraße 1, Tutzing",
-    "placeId": null
+    "placeId": "ChIJTwxP6TjJnUcR725SgNWmneQ"
   },
   {
     "id": "forsthaus-ilkahoehe",
     "name": "Forsthaus Ilkahöhe",
     "category": "restaurant",
     "town": "Tutzing",
-    "lat": 47.899155,
-    "lng": 11.254911,
+    "lat": 47.899174,
+    "lng": 11.254834,
     "blurb": "Hilltop Augustiner restaurant with a panorama to the Zugspitze and open meadow to run around.",
     "tags": [
       "views",
@@ -82,15 +82,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Forsthaus Ilkahöhe, Oberzeismering 2, Tutzing",
-    "placeId": null
+    "placeId": "ChIJcdJeen7JnUcRtlyhs-4ncb0"
   },
   {
     "id": "marina-seerestaurant",
     "name": "Marina Seerestaurant",
     "category": "restaurant",
     "town": "Bernried",
-    "lat": 47.869748,
-    "lng": 11.292601,
+    "lat": 47.869644,
+    "lng": 11.290748,
     "blurb": "Kids watch the boats from a shaded terrace at the yacht harbor (the upscale option).",
     "tags": [
       "lakeside",
@@ -99,15 +99,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Marina Bernried, Am Yachthafen, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJr_h49k7InUcRRS6OOS0d-dE"
   },
   {
     "id": "undosa-starnberg",
     "name": "Seerestaurant Undosa",
     "category": "restaurant",
     "town": "Starnberg",
-    "lat": 47.994067,
-    "lng": 11.34024,
+    "lat": 47.99404,
+    "lng": 11.340082,
     "blurb": "Lakefront dining with its own beach and a large playground right beside the tables.",
     "tags": [
       "lakeside",
@@ -116,15 +116,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Undosa, Seepromenade, Starnberg",
-    "placeId": null
+    "placeId": "ChIJS8w8mtbPnUcRBg6s3QHXBh8"
   },
   {
     "id": "kloster-andechs",
     "name": "Kloster Andechs Bräustüberl",
     "category": "beergarten",
     "town": "Andechs",
-    "lat": 47.974662,
-    "lng": 11.182625,
+    "lat": 47.974267,
+    "lng": 11.183414,
     "blurb": "The famous monastery beer garden: monk-brewed beer, a shaded natural playground, and Alpine views — a regional must-do.",
     "tags": [
       "monastery",
@@ -134,15 +134,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Kloster Andechs Bräustüberl, Bergstraße 2, Andechs",
-    "placeId": null
+    "placeId": "ChIJSaYwlCfNnUcRhyLWr9lwOZ8"
   },
   {
     "id": "midgardhaus",
     "name": "Midgardhaus (Augustiner am See)",
     "category": "beergarten",
     "town": "Tutzing",
-    "lat": 47.914049,
-    "lng": 11.288274,
+    "lat": 47.91377,
+    "lng": 11.288315,
     "blurb": "Classic chestnut-shaded biergarten on the shore where you can bring your own food — great for picky eaters.",
     "tags": [
       "lakeside",
@@ -151,15 +151,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Midgardhaus, Midgardstraße 3, Tutzing",
-    "placeId": null
+    "placeId": "ChIJaa9c3S_JnUcRIfenlkarIeA"
   },
   {
     "id": "wuermseestueberl",
     "name": "Würmseestüberl",
     "category": "beergarten",
     "town": "Seeshaupt",
-    "lat": 47.825829,
-    "lng": 11.302028,
+    "lat": 47.825833,
+    "lng": 11.301944,
     "blurb": "Insider tip right on the shore with a bathing meadow, dock and grilled fish.",
     "tags": [
       "lakeside",
@@ -168,15 +168,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Würmseestüberl, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJeS1T5-23nUcRPNcN8SaASew"
   },
   {
     "id": "buchscharner-seewirt",
     "name": "Buchscharner Seewirt",
     "category": "beergarten",
     "town": "Münsing",
-    "lat": 47.844905,
-    "lng": 11.338103,
+    "lat": 47.845245,
+    "lng": 11.338921,
     "blurb": "East-shore beer garden with a playground and bathing area positioned to keep kids in sight; sunset views.",
     "tags": [
       "lakeside",
@@ -185,15 +185,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Buchscharner Seewirt, Ambach, Münsing",
-    "placeId": null
+    "placeId": "ChIJwxRyjPDHnUcRPTUyVoEVNHo"
   },
   {
     "id": "bali-beach",
     "name": "Bali Beach",
     "category": "beergarten",
     "town": "Bernried",
-    "lat": 47.868084,
-    "lng": 11.293911,
+    "lat": 47.868915,
+    "lng": 11.293152,
     "blurb": "Casual summer beach bar on the promenade with volleyball and a kickabout for the kids.",
     "tags": [
       "lakeside",
@@ -202,15 +202,15 @@
     "standout": false,
     "seasonal": true,
     "googleQuery": "Bali Beach, Seepromenade, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJ09SyS1PJnUcRQxcN3EvDzDM"
   },
   {
     "id": "netto-bernried",
     "name": "Netto Marken-Discount",
     "category": "grocery",
     "town": "Bernried",
-    "lat": 47.857302,
-    "lng": 11.282609,
+    "lat": 47.857393,
+    "lng": 11.282595,
     "blurb": "The only proper grocery in the village, walkable from home.",
     "tags": [
       "everyday",
@@ -219,15 +219,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Netto, Am Neuland 1a, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJVRpUCzTInUcRCWcySQ5-Qvw"
   },
   {
     "id": "baeckerei-ziegler",
     "name": "Bäckerei Florian Ziegler",
     "category": "grocery",
     "town": "Bernried",
-    "lat": 47.867509,
-    "lng": 11.293524,
+    "lat": 47.867489,
+    "lng": 11.293508,
     "blurb": "Traditional village bakery since 1878 — open Sunday morning for fresh rolls.",
     "tags": [
       "bakery",
@@ -236,15 +236,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Bäckerei Ziegler, Dorfstraße 2, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJTf_gSE_InUcRMYHhg9qOsCA"
   },
   {
     "id": "bernrieder-hofladen",
     "name": "Bernrieder Hofladen (Schlossgut)",
     "category": "grocery",
     "town": "Bernried",
-    "lat": 47.868477,
-    "lng": 11.292255,
+    "lat": 47.868088,
+    "lng": 11.292866,
     "blurb": "Lakeside farm shop with cheese, eggs, smoked fish and coffee, cake and ice cream — a little outing in itself.",
     "tags": [
       "farm-shop",
@@ -253,15 +253,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Bernrieder Hofladen, Tutzinger Straße 12, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJne7LPU_InUcRWLmzH89Wv6U"
   },
   {
     "id": "edeka-tutzing",
     "name": "EDEKA Tutzing (+ Aldi)",
     "category": "grocery",
     "town": "Tutzing",
-    "lat": 47.916372,
-    "lng": 11.285198,
+    "lat": 47.903317,
+    "lng": 11.271226,
     "blurb": "Your closest full-size supermarket, with an Aldi next door for the main shop.",
     "tags": [
       "supermarket",
@@ -270,15 +270,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "EDEKA, Lindemannstraße 13, Tutzing",
-    "placeId": null
+    "placeId": "ChIJy8mzfhXJnUcR1jPJ5fKjVI4"
   },
   {
     "id": "edeka-seeshaupt",
     "name": "EDEKA Seeshaupt",
     "category": "grocery",
     "town": "Seeshaupt",
-    "lat": 47.824333,
-    "lng": 11.302928,
+    "lat": 47.824342,
+    "lng": 11.302945,
     "blurb": "The main store for the quieter south end of the lake.",
     "tags": [
       "supermarket"
@@ -286,15 +286,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "EDEKA, Hauptstraße 16, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJ6bL28u23nUcRYI2lQgHF-B4"
   },
   {
     "id": "wochenmarkt-starnberg",
     "name": "Wochenmarkt Starnberg",
     "category": "grocery",
     "town": "Starnberg",
-    "lat": 47.998126,
-    "lng": 11.342,
+    "lat": 47.998092,
+    "lng": 11.341288,
     "blurb": "The biggest regional weekly market — Thursday and Saturday mornings on the Kirchplatz.",
     "tags": [
       "market",
@@ -303,15 +303,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Kirchplatz, Starnberg",
-    "placeId": null
+    "placeId": "ChIJBcRf9ynQnUcReXZv786ObSw"
   },
   {
     "id": "wochenmarkt-tutzing",
     "name": "Wochenmarkt Tutzing",
     "category": "grocery",
     "town": "Tutzing",
-    "lat": 47.9085,
-    "lng": 11.281,
+    "lat": 47.902832,
+    "lng": 11.27682,
     "blurb": "The closest weekly market, Saturday mornings by the Rathaus.",
     "tags": [
       "market",
@@ -320,15 +320,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Kustermannplatz, Tutzing",
-    "placeId": null
+    "placeId": "ChIJb9SWLBTJnUcRHlFSISn8Ykw"
   },
   {
     "id": "spielplatz-brahmspromenade",
     "name": "Spielplatz Brahmspromenade",
     "category": "playground",
     "town": "Tutzing",
-    "lat": 47.913075,
-    "lng": 11.285822,
+    "lat": 47.91315,
+    "lng": 11.286647,
     "blurb": "Playground directly on the lakeshore with Alpine views — the closest great lake-and-play combo to home.",
     "tags": [
       "lakeside",
@@ -337,15 +337,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Brahmspromenade, Tutzing",
-    "placeId": null
+    "placeId": "EidCcmFobXNwcm9tZW5hZGUsIDgyMzI3IFR1dHppbmcsIEdlcm1hbnkiLiosChQKEgkhyW-eOsmdRxGQ4BuPFFxT3hIUChIJby4poD7JnUcR0bMS62UETOc"
   },
   {
     "id": "spielplatz-herrsching",
     "name": "Spielplatz am See (Kurpark)",
     "category": "playground",
     "town": "Herrsching",
-    "lat": 47.996296,
-    "lng": 11.167538,
+    "lat": 47.999381,
+    "lng": 11.168189,
     "blurb": "The region's best lakeside playground: zip line, climbing, carousel, fenced, on a wading beach (Ammersee).",
     "tags": [
       "lakeside",
@@ -355,15 +355,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Kurpark Spielplatz, Madeleine-Ruoff-Straße, Herrsching am Ammersee",
-    "placeId": null
+    "placeId": "ChIJMfBtLLcynEcRd2J2VZujShY"
   },
   {
     "id": "spielplatz-pointstrasse",
     "name": "Spielplatz Pointstraße",
     "category": "playground",
     "town": "Bernried",
-    "lat": 47.865829,
-    "lng": 11.282274,
+    "lat": 47.865839,
+    "lng": 11.282311,
     "blurb": "Fenced neighborhood playground (ages 0–12) — the everyday in-town option.",
     "tags": [
       "fenced",
@@ -372,15 +372,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Pointstraße, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJrTK810rInUcRb2WziFoLpqM"
   },
   {
     "id": "spielplatz-seepromenade-starnberg",
     "name": "Spielplatz Seepromenade",
     "category": "playground",
     "town": "Starnberg",
-    "lat": 47.992821,
-    "lng": 11.339255,
+    "lat": 47.993631,
+    "lng": 11.339699,
     "blurb": "Right on the lakefront promenade, easy to pair with a stroll and an ice cream.",
     "tags": [
       "lakeside"
@@ -388,15 +388,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Seepromenade, Starnberg",
-    "placeId": null
+    "placeId": "ChIJ50abvNbPnUcRwjP1_HHEDfc"
   },
   {
     "id": "bernrieder-park",
     "name": "Bernrieder Park (Buchet)",
     "category": "park",
     "town": "Bernried",
-    "lat": 47.858138,
-    "lng": 11.296313,
+    "lat": 47.858771,
+    "lng": 11.295898,
     "blurb": "On your doorstep: 1.7 km of wild lakefront, ancient beech woods, flat stroller trails, a nature-discovery loop and sandy swim coves.",
     "tags": [
       "lakeside",
@@ -406,15 +406,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Bernrieder Park, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJm8ASfT7InUcRZVTI17Zn9J8"
   },
   {
     "id": "hoehenried-park",
     "name": "Höhenrieder Park / Schloss Höhenried",
     "category": "park",
     "town": "Bernried",
-    "lat": 47.8745,
-    "lng": 11.2865,
+    "lat": 47.876918,
+    "lng": 11.285539,
     "blurb": "The biggest kid magnet near you: an enclosure of rare white deer kids can feed, plus lake paths and Alpine views.",
     "tags": [
       "deer",
@@ -424,15 +424,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Schlosspark Höhenried, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJ-8OSs6zJnUcR3MqYxHR5a9w"
   },
   {
     "id": "ilkahoehe",
     "name": "Ilkahöhe",
     "category": "park",
     "town": "Tutzing",
-    "lat": 47.902182,
-    "lng": 11.249195,
+    "lat": 47.902222,
+    "lng": 11.247778,
     "blurb": "A 728 m panorama hill (lake + Zugspitze) with a beer garden and a play meadow, walkable or bikeable from Tutzing.",
     "tags": [
       "views",
@@ -442,15 +442,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Ilkahöhe, Tutzing",
-    "placeId": null
+    "placeId": "ChIJJWF6cGHJnUcR17OP0WZBu74"
   },
   {
     "id": "maisinger-see",
     "name": "Maisinger See & Schlucht",
     "category": "park",
     "town": "Starnberg",
-    "lat": 47.978185,
-    "lng": 11.276377,
+    "lat": 47.979523,
+    "lng": 11.279225,
     "blurb": "One of Bavaria's oldest reserves — flat stroller-friendly gorge trails, birds and safe picnic spots.",
     "tags": [
       "stroller",
@@ -459,15 +459,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Maisinger See, Starnberg",
-    "placeId": null
+    "placeId": "ChIJnYEobnbOnUcRiogYdmFVFsc"
   },
   {
     "id": "gut-aiderbichl",
     "name": "Gut Aiderbichl Iffeldorf",
     "category": "zoo",
     "town": "Iffeldorf",
-    "lat": 47.798861,
-    "lng": 11.30986,
+    "lat": 47.79847,
+    "lng": 11.30984,
     "blurb": "The near-home pick (~20 min): about 300 rescued tame animals to pet and feed, barrier-free, open every day.",
     "tags": [
       "petting",
@@ -477,15 +477,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Gut Aiderbichl Iffeldorf, Osterseehof 1, Iffeldorf",
-    "placeId": null
+    "placeId": "ChIJAcq3_NS5nUcRD_2WqZ-FCTM"
   },
   {
     "id": "tierpark-hellabrunn",
     "name": "Tierpark Hellabrunn",
     "category": "zoo",
     "town": "Munich",
-    "lat": 48.096281,
-    "lng": 11.554197,
+    "lat": 48.096944,
+    "lng": 11.553889,
     "blurb": "Munich's great zoo day: two petting areas, two playgrounds including water-play, and handcart rental for toddlers.",
     "tags": [
       "zoo",
@@ -495,15 +495,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Tierpark Hellabrunn, Tierparkstraße 30, München",
-    "placeId": null
+    "placeId": "ChIJa7EAiN_enUcR2ArvdpbtEtU"
   },
   {
     "id": "wildpark-poing",
     "name": "Wildpark Poing",
     "category": "zoo",
     "town": "Poing",
-    "lat": 48.174149,
-    "lng": 11.834247,
+    "lat": 48.175632,
+    "lng": 11.830017,
     "blurb": "Tame deer eat from kids' hands, a big playground and a birds-of-prey show — full-day magic east of Munich.",
     "tags": [
       "deer",
@@ -513,15 +513,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Wildpark Poing, Osterfeldweg 20, Poing",
-    "placeId": null
+    "placeId": "ChIJkVjlU9kInkcRUmk6XYO_FDc"
   },
   {
     "id": "heiss-hof",
     "name": "Heiß-Hof",
     "category": "farm",
     "town": "Tutzing",
-    "lat": 47.905196,
-    "lng": 11.219222,
+    "lat": 47.904929,
+    "lng": 11.21967,
     "blurb": "Hands-on farm fun: a milk 'tankstelle' kids bottle themselves and a 23-flavor ice-cream automat.",
     "tags": [
       "milk",
@@ -530,15 +530,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Heiß-Hof, Monatshausen, Tutzing",
-    "placeId": null
+    "placeId": "ChIJqcGS9sXLnUcR2KhIbxh6L6w"
   },
   {
     "id": "starnberger-eiswerkstatt",
     "name": "Starnberger Eiswerkstatt",
     "category": "icecream",
     "town": "Starnberg",
-    "lat": 47.998339,
-    "lng": 11.342004,
+    "lat": 47.998276,
+    "lng": 11.342131,
     "blurb": "Handmade artisan ice cream and fresh waffles — widely called the district's best.",
     "tags": [
       "artisan"
@@ -546,15 +546,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Starnberger Eiswerkstatt, Wittelsbacherstraße 9, Starnberg",
-    "placeId": null
+    "placeId": "ChIJxXQa7ynQnUcRq2iJjjHAuuU"
   },
   {
     "id": "gelatok-junior",
     "name": "GelatóK by Júnior",
     "category": "icecream",
     "town": "Tutzing",
-    "lat": 47.907635,
-    "lng": 11.274264,
+    "lat": 47.907646,
+    "lng": 11.274226,
     "blurb": "Authentic family-run Italian gelato (4.8★) with a sunny, safe outdoor area.",
     "tags": [
       "gelato",
@@ -563,15 +563,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "GelatóK, Bräuhausstraße 2, Tutzing",
-    "placeId": null
+    "placeId": "ChIJi49agabJnUcRshdwidGzgZk"
   },
   {
     "id": "allora-signora",
     "name": "Allora Signora – natürlich.eis",
     "category": "icecream",
     "town": "Seeshaupt",
-    "lat": 47.824669,
-    "lng": 11.303032,
+    "lat": 47.824925,
+    "lng": 11.301514,
     "blurb": "Around 30 natural homemade flavors and a lake-view terrace, two minutes from the boat dock.",
     "tags": [
       "natural",
@@ -580,15 +580,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Allora Signora, Hauptstraße 19, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJyyouje23nUcRYJomPfGZKOs"
   },
   {
     "id": "da-noi",
     "name": "Da Noi Trattoria & Pizzeria",
     "category": "pizza",
     "town": "Seeshaupt",
-    "lat": 47.82485,
-    "lng": 11.301688,
+    "lat": 47.824847,
+    "lng": 11.301727,
     "blurb": "The closest genuinely good pizzeria (~9 km), Naples-style and relaxed for families.",
     "tags": [
       "naples",
@@ -597,15 +597,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Da Noi, Hauptstraße 6, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJAQBrue23nUcR0ySzRB2MGGU"
   },
   {
     "id": "garibaldi",
     "name": "Trattoria Garibaldi",
     "category": "pizza",
     "town": "Pöcking",
-    "lat": 47.9857,
-    "lng": 11.2896,
+    "lat": 47.966791,
+    "lng": 11.300359,
     "blurb": "Explicitly family-friendly — a garden for the kids, crispy pizza and takeaway.",
     "tags": [
       "garden",
@@ -614,15 +614,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Trattoria Garibaldi, Maising, Pöcking",
-    "placeId": null
+    "placeId": "ChIJOdzhI1zOnUcRU-XaJ4PP8kE"
   },
   {
     "id": "mille-lire",
     "name": "Mille Lire",
     "category": "pizza",
     "town": "Tutzing",
-    "lat": 47.910546,
-    "lng": 11.280913,
+    "lat": 47.910603,
+    "lng": 11.280861,
     "blurb": "Central, wood-fired, big portions, with a takeaway mini-menu.",
     "tags": [
       "wood-fired"
@@ -630,15 +630,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Mille Lire, Hauptstraße, Tutzing",
-    "placeId": null
+    "placeId": "ChIJ1XeezjvJnUcRHbUusFWZs5A"
   },
   {
     "id": "strandbad-hubl",
     "name": "Strandbad Hubl",
     "category": "swimming",
     "town": "Bernried",
-    "lat": 47.8662,
-    "lng": 11.2905,
+    "lat": 47.865561,
+    "lng": 11.298377,
     "blurb": "Your home beach behind the monastery: lawn, kiosk, a small playground and on-site boat rental and fishing permits (the Hubl family).",
     "tags": [
       "lakeside",
@@ -648,15 +648,15 @@
     "standout": true,
     "seasonal": true,
     "googleQuery": "Strandbad Hubl, An der Mühle 1, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJdzJBPDLJnUcRb3v3oqe_YYg"
   },
   {
     "id": "strandbad-tutzing-sued",
     "name": "Strandbad Tutzing Süd",
     "category": "swimming",
     "town": "Tutzing",
-    "lat": 47.896764,
-    "lng": 11.274695,
+    "lat": 47.89676,
+    "lng": 11.27476,
     "blurb": "Shallow shoreline ideal for toddlers, with a big lawn, piers, kiosk and a playground.",
     "tags": [
       "toddler",
@@ -666,7 +666,7 @@
     "standout": true,
     "seasonal": true,
     "googleQuery": "Strandbad Tutzing Süd, Seestraße 20, Tutzing",
-    "placeId": null
+    "placeId": "ChIJ3znEexHJnUcRkkTEw7l54YQ"
   },
   {
     "id": "strandbad-seeshaupt",
@@ -690,8 +690,8 @@
     "name": "Familienbad PiORAMA",
     "category": "swimming",
     "town": "Penzberg",
-    "lat": 47.758522,
-    "lng": 11.372024,
+    "lat": 47.75892,
+    "lng": 11.373344,
     "blurb": "Modern indoor family pool with a slide and a jumping facility — the wet-weather and winter default (~25 min).",
     "tags": [
       "indoor",
@@ -701,15 +701,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Familienbad PiORAMA, Penzberg",
-    "placeId": null
+    "placeId": "ChIJ_QGQ8w-5nUcRHComufGvMx8"
   },
   {
     "id": "wasserpark-starnberg",
     "name": "Wasserpark Starnberg",
     "category": "swimming",
     "town": "Starnberg",
-    "lat": 47.99854,
-    "lng": 11.353841,
+    "lat": 47.998687,
+    "lng": 11.353923,
     "blurb": "All-in-one indoor pool with slides and a learner pool, plus an outdoor Strandbad.",
     "tags": [
       "indoor",
@@ -719,15 +719,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Wasserpark Starnberg, Strandbadstraße 17, Starnberg",
-    "placeId": null
+    "placeId": "ChIJNQk7qQX4CEERCPQObb4kZ-Q"
   },
   {
     "id": "hubl-fishing",
     "name": "Fischereikarten Hubl",
     "category": "fishing",
     "town": "Bernried",
-    "lat": 47.8662,
-    "lng": 11.2905,
+    "lat": 47.865636,
+    "lng": 11.298634,
     "blurb": "Buy your Starnberger See fishing permit right in the village (day cards, boat cards) — kids ride along free.",
     "tags": [
       "permits",
@@ -736,15 +736,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "An der Mühle 1, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJ4RZ1kUbInUcRjNalI-3CwYY"
   },
   {
     "id": "seenschifffahrt-bernried",
     "name": "Bayerische Seenschifffahrt — Steg Bernried",
     "category": "marina",
     "town": "Bernried",
-    "lat": 47.8668,
-    "lng": 11.2908,
+    "lat": 47.867775,
+    "lng": 11.297154,
     "blurb": "The 'white-blue fleet' lake steamers stop right in the village (Easter–mid-Oct); a combo ticket covers the boats and the Buchheim Museum.",
     "tags": [
       "steamer",
@@ -753,15 +753,15 @@
     "standout": true,
     "seasonal": true,
     "googleQuery": "Schiffssteg Bernried, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJT6nSwEXInUcRwku08vG9eiA"
   },
   {
     "id": "bootsverleih-hubl",
     "name": "Bootsverleih Hubl",
     "category": "marina",
     "town": "Bernried",
-    "lat": 47.8662,
-    "lng": 11.2905,
+    "lat": 47.865539,
+    "lng": 11.298371,
     "blurb": "Rowboats and pedal boats right at the village beach, mid-May to mid-September — just turn up.",
     "tags": [
       "rowboat",
@@ -770,15 +770,15 @@
     "standout": true,
     "seasonal": true,
     "googleQuery": "Bootsverleih Hubl, An der Mühle 1, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJgV0SkkbInUcRuZNw1sPnH00"
   },
   {
     "id": "segelschule-tutzing",
     "name": "Segelschule Tutzing",
     "category": "marina",
     "town": "Tutzing",
-    "lat": 47.911002,
-    "lng": 11.283449,
+    "lat": 47.910374,
+    "lng": 11.282421,
     "blurb": "The closest serious sailing school, with dedicated supervised kids' courses in small groups.",
     "tags": [
       "sailing",
@@ -787,15 +787,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Segelschule Tutzing, Tutzing",
-    "placeId": null
+    "placeId": "ChIJF6dZqTvJnUcRBzFHr6JQNyU"
   },
   {
     "id": "segelschule-starnberg",
     "name": "Segelschule Starnberg",
     "category": "marina",
     "town": "Starnberg",
-    "lat": 47.911002,
-    "lng": 11.283449,
+    "lat": 47.995379,
+    "lng": 11.34171,
     "blurb": "Well-established school with courses and private lessons at the busy north end.",
     "tags": [
       "sailing"
@@ -803,15 +803,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Segelschule Starnberg, Starnberg",
-    "placeId": null
+    "placeId": "ChIJgaKMfmPPnUcRwgKHJvf8Srs"
   },
   {
     "id": "hofgut-bernried",
     "name": "Hofgut Bernried (dairy)",
     "category": "farm",
     "town": "Bernried",
-    "lat": 47.869667,
-    "lng": 11.286616,
+    "lat": 47.869896,
+    "lng": 11.28857,
     "blurb": "A real working dairy (~90 cows) right behind the lakeside farm shop — see the cows, buy the cheese.",
     "tags": [
       "dairy",
@@ -820,15 +820,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Hofgut Bernried, Tutzinger Straße, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJne7LPU_InUcRdyuZYDIYvJY"
   },
   {
     "id": "lothhof",
     "name": "Lothhof (Demeter)",
     "category": "farm",
     "town": "Münsing",
-    "lat": 47.904071,
-    "lng": 11.375944,
+    "lat": 47.904045,
+    "lng": 11.376063,
     "blurb": "East-shore Demeter farm with an open barn of cows and calves, free-range chickens, a Hofladen and kids' farm tours.",
     "tags": [
       "demeter",
@@ -837,7 +837,7 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Lothhof, Biberweg 1, Münsing",
-    "placeId": null
+    "placeId": "ChIJ-7EyIADHnUcRZkKDj6Tlyvk"
   },
   {
     "id": "bike-bernried-seeshaupt",
@@ -896,8 +896,8 @@
     "name": "Buchheim Museum der Phantasie",
     "category": "kids",
     "town": "Bernried",
-    "lat": 47.872765,
-    "lng": 11.28845,
+    "lat": 47.872842,
+    "lng": 11.289004,
     "blurb": "Your headline landmark: a ship-shaped building jutting over the lake in a magical park, with a hands-on kids' atelier (under-6 free).",
     "tags": [
       "museum",
@@ -907,15 +907,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Buchheim Museum, Am Hirschgarten 1, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJRfm2dlLInUcRMSsgaYGhayw"
   },
   {
     "id": "marcello-funarena",
     "name": "Marcello FUN-ARENA",
     "category": "kids",
     "town": "Starnberg",
-    "lat": 47.98,
-    "lng": 11.315,
+    "lat": 47.781032,
+    "lng": 11.055584,
     "blurb": "A ~2,000 m² indoor playground with a toddler zone — the rainy-day default.",
     "tags": [
       "indoor",
@@ -925,15 +925,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Marcello Fun-Arena, Starnberg",
-    "placeId": null
+    "placeId": "ChIJzcjLwcVLnEcRHLWs4a6zIGM"
   },
   {
     "id": "hochseilgarten-utting",
     "name": "Hochseilgarten Ammersee (Wilde Gretel)",
     "category": "kids",
     "town": "Utting",
-    "lat": 48.029983,
-    "lng": 11.094456,
+    "lat": 48.029971,
+    "lng": 11.094423,
     "blurb": "A pirate-ship high-ropes park with a Bambini course from age 2.",
     "tags": [
       "high-ropes",
@@ -942,15 +942,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Hochseilgarten Ammersee, Fahrmannsbachstraße 2, Utting am Ammersee",
-    "placeId": null
+    "placeId": "ChIJ6Q4Vc_stnEcRQ68I_BPTgPw"
   },
   {
     "id": "minigolf-tutzing",
     "name": "Minigolf Tutzing",
     "category": "kids",
     "town": "Tutzing",
-    "lat": 47.898199,
-    "lng": 11.272778,
+    "lat": 47.898052,
+    "lng": 11.272699,
     "blurb": "Lakeside minigolf on the waterfront promenade.",
     "tags": [
       "lakeside",
@@ -959,14 +959,14 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Minigolf, Seestraße, Tutzing",
-    "placeId": null
+    "placeId": "ChIJaTlUgRPJnUcRN5J06_6eup0"
   },
   {
     "id": "buecherei-tutzing",
     "name": "Gemeindebücherei Tutzing",
     "category": "kids",
     "town": "Tutzing",
-    "lat": 47.910554,
+    "lat": 47.910607,
     "lng": 11.276982,
     "blurb": "A large modern library with a kids' section and picture-book cinema.",
     "tags": [
@@ -976,15 +976,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Gemeindebücherei Tutzing, Kirchenstraße 9, Tutzing",
-    "placeId": null
+    "placeId": "ChIJmQTf6TvJnUcREB5xMrIZu5Y"
   },
   {
     "id": "deutsches-museum",
     "name": "Deutsches Museum — Kinderreich",
     "category": "munich",
     "town": "Munich",
-    "lat": 48.130041,
-    "lng": 11.582909,
+    "lat": 48.129871,
+    "lng": 11.583452,
     "blurb": "A ~1,200 m² hands-on zone built only for ages 3–8 — the best young-kids indoor experience in Munich.",
     "tags": [
       "museum",
@@ -994,15 +994,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Deutsches Museum, Museumsinsel 1, München",
-    "placeId": null
+    "placeId": "ChIJ01CaE2PfnUcRUpb8Ylg-UXo"
   },
   {
     "id": "englischer-garten",
     "name": "Englischer Garten",
     "category": "munich",
     "town": "Munich",
-    "lat": 48.164861,
-    "lng": 11.606404,
+    "lat": 48.160487,
+    "lng": 11.598318,
     "blurb": "Free all day: meadows, paddling streams, a historic carousel, rowboats and a playground by the Seehaus.",
     "tags": [
       "park",
@@ -1012,15 +1012,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Englischer Garten, Seehaus, München",
-    "placeId": null
+    "placeId": "ChIJG7onr6V1nkcRwj0tZvIapSE"
   },
   {
     "id": "olympiapark",
     "name": "Olympiapark (+ SEA LIFE)",
     "category": "munich",
     "town": "Munich",
-    "lat": 48.168706,
-    "lng": 11.550364,
+    "lat": 48.175427,
+    "lng": 11.551988,
     "blurb": "Top playgrounds, summer boats and a toddler area, with an aquarium as a weatherproof backup.",
     "tags": [
       "park",
@@ -1030,15 +1030,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Olympiapark, Spiridon-Louis-Ring 21, München",
-    "placeId": null
+    "placeId": "ChIJM7U-OGN2nkcRS91BCoGkObE"
   },
   {
     "id": "walchensee",
     "name": "Walchensee + Herzogstandbahn",
     "category": "alps",
     "town": "Walchensee",
-    "lat": 47.596361,
-    "lng": 11.317824,
+    "lat": 47.596355,
+    "lng": 11.316105,
     "blurb": "The most versatile Alpine day: a turquoise swimming lake plus an easy cable car to a café-with-a-view summit (~45–60 min).",
     "tags": [
       "lake",
@@ -1048,15 +1048,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Herzogstandbahn, Walchensee, Kochel am See",
-    "placeId": null
+    "placeId": "ChIJ_ZlEoaimnUcRcJ5GxJ7AfyY"
   },
   {
     "id": "blomberg",
     "name": "Blomberg (Blombergbahn)",
     "category": "alps",
     "town": "Bad Tölz",
-    "lat": 47.743804,
-    "lng": 11.569081,
+    "lat": 47.747493,
+    "lng": 11.515969,
     "blurb": "Best thrill day for the littlest: a summer toboggan run (kids ride from age 3 on a parent's lap) and an adventure park (~40–55 min).",
     "tags": [
       "toboggan",
@@ -1065,15 +1065,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Blombergbahn, Am Blomberg 1, Wackersberg, Bad Tölz",
-    "placeId": null
+    "placeId": "ChIJr-8rOuGVnUcRmlY_0Ym8rr0"
   },
   {
     "id": "partnachklamm",
     "name": "Partnachklamm Gorge",
     "category": "alps",
     "town": "Garmisch-Partenkirchen",
-    "lat": 47.464649,
-    "lng": 11.122121,
+    "lat": 47.467561,
+    "lng": 11.120027,
     "blurb": "A dramatic, flat gorge walk of waterfalls, tunnels and spray — bring a carrier, not a stroller (~1 hr).",
     "tags": [
       "gorge",
@@ -1083,15 +1083,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Partnachklamm, Garmisch-Partenkirchen",
-    "placeId": null
+    "placeId": "ChIJOUFSRI8GnUcRZncn4ALFq0A"
   },
   {
     "id": "zugspitze-eibsee",
     "name": "Zugspitze + Eibsee",
     "category": "alps",
     "town": "Grainau",
-    "lat": 47.438955,
-    "lng": 10.988807,
+    "lat": 47.456235,
+    "lng": 10.972881,
     "blurb": "Germany's highest peak with summer snow to play in, above the turquoise Eibsee — save it for a clear day (~1 hr 10).",
     "tags": [
       "summit",
@@ -1100,15 +1100,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Eibsee, Grainau",
-    "placeId": null
+    "placeId": "ChIJnevM9QwCnUcR3KHqrTuNCVc"
   },
   {
     "id": "mis-buchhof",
     "name": "Munich International School (MIS)",
     "category": "school",
     "town": "Starnberg",
-    "lat": 48.000765,
-    "lng": 11.383161,
+    "lat": 48.002382,
+    "lng": 11.379758,
     "blurb": "English-medium IB school, ages 4–18 — the premier expat option (~25 min).",
     "tags": [
       "english",
@@ -1118,15 +1118,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Munich International School, Schloss Buchhof, Starnberg",
-    "placeId": null
+    "placeId": "ChIJJcxYCQbQnUcRCAgBBoQs2wA"
   },
   {
     "id": "createschools-tutzing",
     "name": "CreateSchools",
     "category": "school",
     "town": "Tutzing",
-    "lat": 47.896525,
-    "lng": 11.264582,
+    "lat": 47.896365,
+    "lng": 11.264519,
     "blurb": "Bilingual English/German from Year 1 (Cambridge + Bavarian curriculum) — the closest English/bilingual school (~12 min), starts at Grade 1.",
     "tags": [
       "bilingual",
@@ -1135,15 +1135,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "CreateSchools, Ziegeleistraße 12, Tutzing",
-    "placeId": null
+    "placeId": "ChIJtU6Lr23JnUcRlgRKgGhdfFw"
   },
   {
     "id": "grundschule-bernried",
     "name": "Grundschule Bernried",
     "category": "school",
     "town": "Bernried",
-    "lat": 47.86445,
-    "lng": 11.294727,
+    "lat": 47.86444,
+    "lng": 11.29469,
     "blurb": "The local German public primary school — on your own street, a ~2 min walk.",
     "tags": [
       "german",
@@ -1152,15 +1152,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Grundschule Bernried, Reitweg 13a, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJjUIjK0bInUcRL6xOKOg-ktc"
   },
   {
     "id": "gymnasium-tutzing",
     "name": "Gymnasium Tutzing",
     "category": "school",
     "town": "Tutzing",
-    "lat": 47.90741,
-    "lng": 11.279875,
+    "lat": 47.907721,
+    "lng": 11.279827,
     "blurb": "The nearest German state Gymnasium (academic secondary).",
     "tags": [
       "german",
@@ -1169,15 +1169,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Gymnasium Tutzing, Hauptstraße 20, Tutzing",
-    "placeId": null
+    "placeId": "ChIJYyHGn9rJnUcRa38aidPCvFw"
   },
   {
     "id": "montessori-biberkor",
     "name": "Montessori Biberkor",
     "category": "school",
     "town": "Berg",
-    "lat": 47.946822,
-    "lng": 11.379954,
+    "lat": 47.946478,
+    "lng": 11.380464,
     "blurb": "Montessori from Kinderhaus to Abitur — note it's German-medium, not bilingual (~35–40 min).",
     "tags": [
       "montessori",
@@ -1186,15 +1186,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Montessori Biberkor, Biberkorstraße 19, Berg",
-    "placeId": null
+    "placeId": "ChIJgbZ3IpvFnUcRGZn7iGHH0vI"
   },
   {
     "id": "kinderhaus-bernried",
     "name": "Integratives Kinderhaus Bernried",
     "category": "kita",
     "town": "Bernried",
-    "lat": 47.864487,
-    "lng": 11.293994,
+    "lat": 47.86451,
+    "lng": 11.29406,
     "blurb": "Kindergarten (3–6) plus after-school Hort, right next to the house.",
     "tags": [
       "kindergarten",
@@ -1203,15 +1203,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Kinderhaus, Reitweg 13, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJSwa3EiReCEERQF8h7HCYHuY"
   },
   {
     "id": "krippe-kloster-bernried",
     "name": "Krippe am Kloster",
     "category": "kita",
     "town": "Bernried",
-    "lat": 47.866407,
-    "lng": 11.296194,
+    "lat": 47.866421,
+    "lng": 11.296152,
     "blurb": "Infant Krippe (ages ~1–3) on the monastery grounds.",
     "tags": [
       "krippe",
@@ -1220,15 +1220,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Klosterhof 8, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJGdtYC0bInUcRKtkO5XC1bGE"
   },
   {
     "id": "waldkinder-bernried",
     "name": "Waldkinder Bernried",
     "category": "kita",
     "town": "Bernried",
-    "lat": 47.865619,
-    "lng": 11.279666,
+    "lat": 47.865955,
+    "lng": 11.279795,
     "blurb": "Parent-run forest kindergarten (ages 3–6).",
     "tags": [
       "forest",
@@ -1237,15 +1237,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Lindenplatz 6, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJVWLC37TJnUcRSrBBkLSZaFY"
   },
   {
     "id": "kinderhaus-seeshaupt",
     "name": "Kinderhaus Seeshaupt",
     "category": "kita",
     "town": "Seeshaupt",
-    "lat": 47.8242,
-    "lng": 11.299083,
+    "lat": 47.824221,
+    "lng": 11.298762,
     "blurb": "Municipal Krippe + Kindergarten + Hort (ages 1 to grade 4).",
     "tags": [
       "krippe",
@@ -1255,15 +1255,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Kinderhaus Seeshaupt, Pettenkofer Allee 13, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJV5ZXZ-y3nUcRqakGr7hiKuc"
   },
   {
     "id": "klinikum-starnberg",
     "name": "Klinikum Starnberg",
     "category": "health",
     "town": "Starnberg",
-    "lat": 48.006645,
-    "lng": 11.333844,
+    "lat": 48.007035,
+    "lng": 11.334762,
     "blurb": "The nearest hospital with a real children's clinic — 24/7 pediatric ER and neonatology (~25–30 min).",
     "tags": [
       "hospital",
@@ -1272,15 +1272,15 @@
     "standout": true,
     "seasonal": false,
     "googleQuery": "Klinikum Starnberg, Oßwaldstraße 1, Starnberg",
-    "placeId": null
+    "placeId": "ChIJ4-Sd9tLRnUcRSqKjn6sPO2A"
   },
   {
     "id": "krankenhaus-weilheim",
     "name": "Krankenhaus Weilheim",
     "category": "health",
     "town": "Weilheim",
-    "lat": 47.836916,
-    "lng": 11.144045,
+    "lat": 47.836989,
+    "lng": 11.144594,
     "blurb": "Tied-closest ER (~18–22 min); treats kids' injuries but has no pediatric ward.",
     "tags": [
       "hospital",
@@ -1289,15 +1289,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Krankenhaus Weilheim, Johann-Baur-Straße 4, Weilheim in Oberbayern",
-    "placeId": null
+    "placeId": "ChIJiT4XM2u1nUcRShBHY9f-Npc"
   },
   {
     "id": "klinikum-penzberg",
     "name": "Klinikum Penzberg",
     "category": "health",
     "town": "Penzberg",
-    "lat": 47.754627,
-    "lng": 11.375728,
+    "lat": 47.754495,
+    "lng": 11.376226,
     "blurb": "One of the two closest ERs (~20–25 min); no pediatric ward.",
     "tags": [
       "hospital",
@@ -1306,15 +1306,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Klinikum Penzberg, Am Schloßbichl 7, Penzberg",
-    "placeId": null
+    "placeId": "ChIJ2-0OjFi5nUcRDH0EqVSWq8I"
   },
   {
     "id": "haunersches-munich",
     "name": "Dr. von Haunersches Kinderspital",
     "category": "health",
     "town": "Munich",
-    "lat": 48.130282,
-    "lng": 11.559205,
+    "lat": 48.130132,
+    "lng": 11.559098,
     "blurb": "Major LMU children's hospital and pediatric ER for serious or specialist cases (~45–60 min).",
     "tags": [
       "childrens-hospital",
@@ -1323,15 +1323,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Dr. von Haunersches Kinderspital, Lindwurmstraße 4, München",
-    "placeId": null
+    "placeId": "ChIJi-yHCVrfnUcRZ7kMsmU1zDo"
   },
   {
     "id": "kinderarzt-seeshaupt",
     "name": "Kinderärzte Praxis Seeshaupt",
     "category": "health",
     "town": "Seeshaupt",
-    "lat": 47.823135,
-    "lng": 11.299681,
+    "lat": 47.823128,
+    "lng": 11.299568,
     "blurb": "Closest pediatrician by distance (branch office — confirm clinic days), ~8–12 min.",
     "tags": [
       "pediatrician"
@@ -1339,15 +1339,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Bahnhofstraße 3, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJOf4E4-y3nUcR0UZjRWtnGV0"
   },
   {
     "id": "kinderarzt-indlekofer",
     "name": "Dr. Birgit Indlekofer (Kinderärztin)",
     "category": "health",
     "town": "Tutzing",
-    "lat": 47.908484,
-    "lng": 11.276567,
+    "lat": 47.908501,
+    "lng": 11.276544,
     "blurb": "Full-time standalone pediatric practice (~12–15 min).",
     "tags": [
       "pediatrician"
@@ -1355,15 +1355,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Bahnhofstraße 12, Tutzing",
-    "placeId": null
+    "placeId": "ChIJZyCTzT7JnUcR3_L6qE7Y1No"
   },
   {
     "id": "apotheke-seeshaupt",
     "name": "St. Michaels-Apotheke",
     "category": "health",
     "town": "Seeshaupt",
-    "lat": 47.824673,
-    "lng": 11.300993,
+    "lat": 47.824709,
+    "lng": 11.301143,
     "blurb": "The single closest pharmacy (~7–9 min).",
     "tags": [
       "pharmacy"
@@ -1371,15 +1371,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "St. Michaels-Apotheke, Penzberger Straße 3, Seeshaupt",
-    "placeId": null
+    "placeId": "ChIJtdDlye23nUcR_q3wLs0-lrs"
   },
   {
     "id": "apotheke-tutzing",
     "name": "Schloss-Apotheke Tutzing",
     "category": "health",
     "town": "Tutzing",
-    "lat": 47.910875,
-    "lng": 11.28061,
+    "lat": 47.910879,
+    "lng": 11.280538,
     "blurb": "Pharmacy with its own compounding lab (~12–14 min).",
     "tags": [
       "pharmacy"
@@ -1387,15 +1387,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Schloss-Apotheke, Hauptstraße 43, Tutzing",
-    "placeId": null
+    "placeId": "ChIJj-GczTvJnUcR5IAuBJAgoJA"
   },
   {
     "id": "vet-droste-bernried",
     "name": "Tierarztpraxis Dr. Droste",
     "category": "health",
     "town": "Bernried",
-    "lat": 47.86147,
-    "lng": 11.284664,
+    "lat": 47.861487,
+    "lng": 11.284677,
     "blurb": "In-town vet (small animals + horses) — the first-choice local, ~3 min.",
     "tags": [
       "vet"
@@ -1403,15 +1403,15 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Bahnhofstraße 23, Bernried am Starnberger See",
-    "placeId": null
+    "placeId": "ChIJk4WpwTXInUcRZ-r_AFA1lKY"
   },
   {
     "id": "tierklinik-starnberg",
     "name": "Tierklinik Starnberg",
     "category": "health",
     "town": "Starnberg",
-    "lat": 48.006795,
-    "lng": 11.349282,
+    "lat": 48.00682,
+    "lng": 11.34929,
     "blurb": "Full clinic with 24/7 emergency — the nearest true emergency vet (~22 min).",
     "tags": [
       "vet",
@@ -1420,6 +1420,6 @@
     "standout": false,
     "seasonal": false,
     "googleQuery": "Tierklinik Starnberg, Truhenseeweg 8, Starnberg",
-    "placeId": null
+    "placeId": "ChIJo9FWIDDQnUcRAY7CnWMX_g8"
   }
 ]
