@@ -10,9 +10,11 @@ different thing than on a 10-min line.
 
 Reachable stations and their arrival time FROM THE HOUSE are curated from the real
 timetable: RB66 Kochelseebahn is hourly, Bernried→München Hbf ~36 min; S6 (change at
-Tutzing) ~every 20 min. For each band we union a walkshed around the home (sized by
-the band, capped at the 14-min access walk) with an 8-min walkshed around every
-station reachable within that many minutes. Disconnected regions are real.
+Tutzing) ~every 20 min. Each station is drawn ONCE, in the color of the band it first
+becomes reachable in (non-cumulative) — so Tutzing (~22 min) reads as 30-min, not as a
+slower 45/60 ring around it. Catchments are 8-min walksheds around the real Bahnhof
+locations; the home walkshed (access side) lives in the 5/10/15 bands. Regions are
+genuinely disconnected on an hourly rural line — that's honest, and labeled.
 
 Run: tools/.venv/bin/python tools/build_transit_isochrones.py
 """
@@ -41,25 +43,33 @@ STATION_WALK_MIN = 8  # egress walk radius at a destination station
 HULL_RATIO = 0.45
 INF = float("inf")
 
-# Reachable rail stations: name, lat, lng, arrival minutes FROM THE HOUSE
-# (= 14-min access walk + real ride time + ~3-min transfer where a change is needed).
+# Reachable rail stations (Bahnhof coordinates): name, lat, lng, arrival minutes FROM
+# THE HOUSE (= 14-min access walk + real ride time + ~3-min transfer where needed).
 STATIONS = [
-    ("Seeshaupt", 47.8256, 11.3064, 19),       # RB66 south
-    ("Penzberg", 47.7530, 11.3730, 27),         # RB66 south
-    ("Bichl", 47.7180, 11.4130, 32),            # RB66 south
-    ("Benediktbeuern", 47.7050, 11.4170, 35),   # RB66 south
-    ("Kochel", 47.6620, 11.3590, 39),           # RB66 south (terminus)
-    ("Tutzing", 47.9089, 11.2806, 22),          # RB66 north
-    ("Feldafing", 47.9360, 11.2960, 28),        # S6 via Tutzing
-    ("Possenhofen", 47.9530, 11.3050, 30),      # S6 via Tutzing
-    ("Starnberg", 47.9970, 11.3430, 30),        # RB66 direct
-    ("Gauting", 48.0680, 11.3770, 40),          # S6 via Tutzing
-    ("Weilheim", 47.8380, 11.1530, 39),         # RB6 via Tutzing
-    ("Murnau", 47.6810, 11.2030, 49),           # RB6 via Tutzing
-    ("München-Pasing", 48.1500, 11.4610, 42),   # RB66 direct
-    ("München Hbf", 48.1402, 11.5586, 50),      # RB66 direct
-    ("München Marienplatz", 48.1374, 11.5755, 56),  # + S-Bahn trunk
+    ("Seeshaupt", 47.82256, 11.28718, 19),      # RB66 south
+    ("Penzberg", 47.74947, 11.37200, 27),       # RB66 south
+    ("Bichl", 47.72345, 11.40883, 32),          # RB66 south
+    ("Benediktbeuern", 47.70920, 11.40338, 35), # RB66 south
+    ("Kochel", 47.66135, 11.37442, 39),         # RB66 south (terminus)
+    ("Tutzing", 47.90711, 11.27280, 22),        # RB66 north
+    ("Feldafing", 47.94693, 11.29132, 28),      # S6 via Tutzing
+    ("Possenhofen", 47.96673, 11.30829, 30),    # S6 via Tutzing
+    ("Starnberg", 47.99594, 11.34387, 30),      # RB66 north
+    ("Gauting", 48.07071, 11.37619, 40),        # S6 via Tutzing
+    ("Weilheim", 47.84522, 11.14303, 39),       # RB6 via Tutzing
+    ("Murnau", 47.68225, 11.19307, 49),         # RB6 via Tutzing
+    ("München-Pasing", 48.14996, 11.46177, 42), # RB66 direct
+    ("München Hbf", 48.14073, 11.55694, 50),    # RB66 direct
 ]
+
+
+def arrival_band(arrival: int):
+    """Smallest band a station first becomes reachable in (so it's drawn once, in
+    that band's color — not re-drawn as a larger, slower-looking ring)."""
+    for b in (5, 10, 15, 30, 45, 60):
+        if arrival <= b:
+            return b
+    return None
 
 _cache: dict = {}
 
@@ -106,11 +116,14 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     for band in (5, 10, 15, 30, 45, 60):
         parts = []
-        hw = walkshed(HOME[0], HOME[1], min(band, ACCESS_WALK_MIN))
-        if hw:
-            parts.append(hw)
+        # Non-cumulative: the home walkshed lives in the access-walk bands (5/10/15);
+        # each station appears once, in the band it first becomes reachable in.
+        if band in (5, 10, 15):
+            hw = walkshed(HOME[0], HOME[1], min(band, ACCESS_WALK_MIN))
+            if hw:
+                parts.append(hw)
         for name, lat, lng, arrival in STATIONS:
-            if arrival <= band:
+            if arrival_band(arrival) == band:
                 w = walkshed(lat, lng, STATION_WALK_MIN)
                 if w:
                     parts.append(w)

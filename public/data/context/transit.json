@@ -11,11 +11,6 @@
       "line": "S6 (change at Tutzing)",
       "headway": "~3×/hour",
       "detail": "Every 20 min Starnberg–Munich; from Tutzing the gap alternates 20/40 min. Reaches the lake S-Bahn stops and central Munich."
-    },
-    {
-      "line": "Bus 948",
-      "headway": "weekday only",
-      "detail": "School-oriented; no weekend service. The train is the useful link."
     }
   ]
 }
