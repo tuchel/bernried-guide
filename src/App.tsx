@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { APIProvider } from '@vis.gl/react-google-maps'
 import { MapView } from './components/MapView'
 import { MapViewGoogle } from './components/MapViewGoogle'
+import { MapErrorBoundary } from './components/MapErrorBoundary'
 
 const AnalysisPage = lazy(() =>
   import('./analysis/AnalysisPage').then((m) => ({ default: m.AnalysisPage })),
@@ -30,6 +31,7 @@ export default function App() {
   const [bands, setBands] = useState<Set<Band>>(() => new Set<Band>([5, 10, 15, 30, 45, 60]))
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [lens, setLens] = useState<LensId | null>(null)
 
   const hasGoogle = Boolean(GOOGLE_MAPS_API_KEY)
@@ -86,6 +88,14 @@ export default function App() {
     { id: 'family', label: '👨‍👩‍👧 Family' },
   ]
 
+  // One flat list of every nav action — rendered in the mobile hamburger menu.
+  const menuItems: { label: string; onClick: () => void }[] = [
+    ...lensButtons.map((b) => ({ label: b.label, onClick: () => setLens(b.id) })),
+    { label: '📊 Property analysis', onClick: () => (window.location.hash = 'analysis') },
+    { label: '💶 Running costs', onClick: () => (window.location.hash = 'costs') },
+    { label: '⚙️ Filters & map layers', onClick: () => setFiltersOpen(true) },
+  ]
+
   if (route === '#analysis') {
     return (
       <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading analysis…</div>}>
@@ -113,7 +123,8 @@ export default function App() {
               Everyday life & adventures around {HOME.address}
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-1.5">
+          {/* Desktop: inline nav (filter sidebar is visible separately at lg+) */}
+          <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
             {lensButtons.map((b) => (
               <button
                 key={b.id}
@@ -135,12 +146,59 @@ export default function App() {
             >
               💶 Costs
             </button>
+          </div>
+
+          {/* Mobile / tablet: hamburger menu */}
+          <div className="relative shrink-0 lg:hidden">
             <button
-              onClick={() => setFiltersOpen((v) => !v)}
-              className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium hover:bg-white/20 lg:hidden"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 hover:bg-white/20"
             >
-              ⚙ Filters
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
+                {menuOpen ? (
+                  <>
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                  </>
+                ) : (
+                  <>
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </>
+                )}
+              </svg>
             </button>
+
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
+                <div className="absolute right-0 top-full z-40 mt-2 w-60 overflow-hidden rounded-xl bg-white py-1 text-gray-800 shadow-2xl ring-1 ring-black/10">
+                  {menuItems.map((m) => (
+                    <button
+                      key={m.label}
+                      onClick={() => {
+                        m.onClick()
+                        setMenuOpen(false)
+                      }}
+                      className="block w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-lake-50"
+                    >
+                      {m.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -153,25 +211,27 @@ export default function App() {
 
         {/* Map */}
         <main className="relative flex-1">
-          {hasGoogle ? (
-            <MapViewGoogle
-              places={list}
-              activeCategories={activeCategories}
-              mode={mode}
-              bands={bands}
-              selectedId={selectedId}
-              onSelect={setSelectedId}
-            />
-          ) : (
-            <MapView
-              places={list}
-              activeCategories={activeCategories}
-              mode={mode}
-              bands={bands}
-              selectedId={selectedId}
-              onSelect={setSelectedId}
-            />
-          )}
+          <MapErrorBoundary>
+            {hasGoogle ? (
+              <MapViewGoogle
+                places={list}
+                activeCategories={activeCategories}
+                mode={mode}
+                bands={bands}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+              />
+            ) : (
+              <MapView
+                places={list}
+                activeCategories={activeCategories}
+                mode={mode}
+                bands={bands}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+              />
+            )}
+          </MapErrorBoundary>
 
           {mode && <Legend mode={mode} bands={bands} />}
 
