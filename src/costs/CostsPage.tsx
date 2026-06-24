@@ -82,7 +82,7 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
             {[
               { k: 'All-in / year', v: '~€70k' },
               { k: 'Cash out the door', v: '~€42k' },
-              { k: 'of purchase price', v: '~0.72%' },
+              { k: 'of purchase price', v: '~0.71%' },
             ].map((m) => (
               <div key={m.k} className="rounded-lg bg-white/10 px-3 py-2">
                 <div className="text-lg font-bold">{m.v}</div>
