@@ -9,7 +9,7 @@ import {
   type CostGroup,
 } from './data'
 
-const eur = (n: number) => '€' + n.toLocaleString('en-US')
+const eur = (n: number) => '€' + Math.round(n).toLocaleString('en-US')
 const eurK = (n: number) => '€' + Math.round(n / 1000) + 'k'
 
 function bold(text: string) {
@@ -19,6 +19,12 @@ function bold(text: string) {
 function Cite({ n }: { n: number }) {
   const s = SOURCES.find((x) => x.n === n)
   if (!s) return null
+  if (!s.url)
+    return (
+      <span title={s.title} className="ml-0.5 align-super text-[10px] font-medium text-gray-400">
+        [{n}]
+      </span>
+    )
   return (
     <a href={s.url} target="_blank" rel="noreferrer" title={s.title} className="ml-0.5 align-super text-[10px] font-medium text-lake-600 hover:underline">
       [{n}]
@@ -36,11 +42,11 @@ function Section({ id, eyebrow, title, children }: { id: string; eyebrow: string
   )
 }
 
-/** Where the money goes — point estimate by group, as horizontal bars. */
+/** Where the owner's money goes — operating spend by group (excludes the repair reserve). */
 function GroupBars() {
-  const groups = [...new Set(COSTS.map((c) => c.group))] as CostGroup[]
+  const groups = [...new Set(COSTS.filter((c) => !c.estimate).map((c) => c.group))] as CostGroup[]
   const totals = groups
-    .map((g) => ({ g, v: COSTS.filter((c) => c.group === g).reduce((s, c) => s + c.point, 0) }))
+    .map((g) => ({ g, v: COSTS.filter((c) => c.group === g && !c.estimate).reduce((s, c) => s + c.annual, 0) }))
     .sort((a, b) => b.v - a.v)
   const max = Math.max(...totals.map((t) => t.v))
   const grand = totals.reduce((s, t) => s + t.v, 0)
@@ -50,7 +56,7 @@ function GroupBars() {
   const height = totals.length * rowH + 8
   return (
     <figure className="my-5 rounded-xl border border-gray-200 bg-white p-4">
-      <figcaption className="mb-2 text-sm font-semibold text-gray-800">Where the money goes (point estimate, €/yr)</figcaption>
+      <figcaption className="mb-2 text-sm font-semibold text-gray-800">Where the money goes (owner-reported, €/yr)</figcaption>
       <svg viewBox={`0 0 560 ${height}`} width="100%" height="auto">
         {totals.map((t, i) => {
           const y = i * rowH + 6
@@ -70,6 +76,8 @@ function GroupBars() {
 }
 
 export function CostsPage({ onBack }: { onBack: () => void }) {
+  const owner = COSTS.filter((c) => !c.estimate)
+  const reserve = COSTS.find((c) => c.estimate)
   return (
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
       <header className="bg-lake-800 text-white">
@@ -77,12 +85,12 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
           <button onClick={onBack} className="mb-3 text-xs text-lake-100 hover:text-white">← Back to the guide</button>
           <p className="text-xs font-semibold uppercase tracking-wide text-lake-200">Running costs</p>
           <h1 className="mt-1 text-2xl font-bold leading-tight sm:text-3xl">What does it cost to run this house?</h1>
-          <p className="mt-1 text-sm text-lake-100">A ground-up estimate of the all-in annual cost of owning Reitweg 25</p>
+          <p className="mt-1 text-sm text-lake-100">The owner's actual operating-cost statement for Reitweg 25, annualized</p>
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
-              { k: 'All-in / year', v: '~€70k' },
-              { k: 'Cash out the door', v: '~€42k' },
-              { k: 'of purchase price', v: '~0.71%' },
+              { k: 'Owner avg / month', v: '€6,307' },
+              { k: 'Operating / year', v: '€75,688' },
+              { k: 'All-in incl. repairs', v: '~€104k' },
             ].map((m) => (
               <div key={m.k} className="rounded-lg bg-white/10 px-3 py-2">
                 <div className="text-lg font-bold">{m.v}</div>
@@ -102,58 +110,68 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
         </div>
       </div>
 
-      <Section id="breakdown" eyebrow="Breakdown" title="Upkeep and labor dominate">
+      <Section id="breakdown" eyebrow="Breakdown" title="People and grounds dominate">
         <GroupBars />
         <p className="text-sm leading-relaxed text-gray-700">
-          The maintenance reserve (~€28k) and people (housekeeping + garden, ~€18k) are the two biggest buckets — together over
-          half the all-in cost. Energy is the largest single hard bill. Property tax, by contrast, is trivially small.
+          The garden and housekeeping alone are <strong>€34,355/yr — 45%</strong> of the bill, and largely a service-level choice.
+          Energy (gas + electricity) is the largest fixed cost at ~€20k. Property tax, by contrast, is trivially small.
         </p>
       </Section>
 
-      <Section id="items" eyebrow="Line items" title="The full ledger">
+      <Section id="items" eyebrow="Line items" title="The owner's ledger">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="border-b border-gray-300 text-gray-500">
               <tr>
                 <th className="py-1.5 pr-2">Item</th>
-                <th className="py-1.5 pr-2 text-right">Low</th>
-                <th className="py-1.5 pr-2 text-right">Point</th>
-                <th className="py-1.5 pr-2 text-right">High</th>
+                <th className="py-1.5 pr-2 text-right">€ / month</th>
+                <th className="py-1.5 pr-2 text-right">€ / year</th>
                 <th className="hidden py-1.5 sm:table-cell">Basis</th>
               </tr>
             </thead>
             <tbody>
-              {COSTS.map((c) => (
+              {owner.map((c) => (
                 <tr key={c.label} className="border-b border-gray-100">
                   <td className="py-1.5 pr-2">
                     <span className="mr-1.5 inline-block h-2 w-2 rounded-full align-middle" style={{ background: GROUP_COLORS[c.group] }} />
                     {c.label}
-                    {c.computed && <span className="ml-1 text-[9px] text-gray-400">calc</span>}
-                    {c.src && <Cite n={c.src} />}
+                    {c.label.startsWith('Property tax') && <Cite n={2} />}
                   </td>
-                  <td className="py-1.5 pr-2 text-right text-gray-400">{eur(c.low)}</td>
-                  <td className="py-1.5 pr-2 text-right font-medium text-gray-800">{eur(c.point)}</td>
-                  <td className="py-1.5 pr-2 text-right text-gray-400">{eur(c.high)}</td>
+                  <td className="py-1.5 pr-2 text-right text-gray-500">{c.monthly != null ? eur(c.monthly) : '—'}</td>
+                  <td className="py-1.5 pr-2 text-right font-medium text-gray-800">{eur(c.annual)}</td>
                   <td className="hidden py-1.5 text-gray-500 sm:table-cell">{c.basis}</td>
                 </tr>
               ))}
               <tr className="border-t-2 border-gray-300 font-semibold">
-                <td className="py-2 pr-2">Total, all-in</td>
-                <td className="py-2 pr-2 text-right text-gray-500">{eurK(TOTALS.allIn.low)}</td>
-                <td className="py-2 pr-2 text-right text-lake-700">{eur(TOTALS.allIn.point)}</td>
-                <td className="py-2 pr-2 text-right text-gray-500">{eurK(TOTALS.allIn.high)}</td>
+                <td className="py-2 pr-2">Operating total <span className="font-normal text-gray-400">(owner-reported)</span></td>
+                <td className="py-2 pr-2 text-right text-gray-700">{eur(TOTALS.monthly)}</td>
+                <td className="py-2 pr-2 text-right text-lake-700">{eur(TOTALS.operating)}</td>
                 <td className="hidden sm:table-cell" />
               </tr>
-              <tr className="text-gray-500">
-                <td className="py-1 pr-2 text-xs font-normal">…cash out the door (reserve treated as savings)</td>
-                <td className="py-1 pr-2 text-right text-xs">{eurK(TOTALS.cash.low)}</td>
-                <td className="py-1 pr-2 text-right text-xs font-medium">{eur(TOTALS.cash.point)}</td>
-                <td className="py-1 pr-2 text-right text-xs">{eurK(TOTALS.cash.high)}</td>
+              {reserve && (
+                <tr className="text-gray-500">
+                  <td className="py-1.5 pr-2">
+                    <span className="mr-1.5 inline-block h-2 w-2 rounded-full align-middle" style={{ background: GROUP_COLORS[reserve.group] }} />
+                    {reserve.label} <span className="text-[9px] uppercase tracking-wide text-gray-400">our estimate</span>
+                    <Cite n={3} />
+                  </td>
+                  <td className="py-1.5 pr-2 text-right">—</td>
+                  <td className="py-1.5 pr-2 text-right">~{eurK(reserve.annual)}</td>
+                  <td className="hidden py-1.5 text-gray-500 sm:table-cell">{reserve.basis}</td>
+                </tr>
+              )}
+              <tr className="border-t border-gray-200 font-semibold text-gray-800">
+                <td className="py-2 pr-2">All-in <span className="font-normal text-gray-400">(operating + reserve)</span></td>
+                <td className="py-2 pr-2 text-right" />
+                <td className="py-2 pr-2 text-right text-lake-700">~{eur(TOTALS.allIn.point)}</td>
                 <td className="hidden sm:table-cell" />
               </tr>
             </tbody>
           </table>
         </div>
+        <p className="mt-2 text-[11px] text-gray-400">
+          Owner figures are exact monthly averages ×12; the repair reserve and all-in are our estimates. All-in range ~{eurK(TOTALS.allIn.low)}–{eurK(TOTALS.allIn.high)}/yr.
+        </p>
       </Section>
 
       <Section id="grundsteuer" eyebrow="Worth knowing" title="Property tax barely registers">
@@ -169,7 +187,7 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
               ))}
             </tbody>
           </table>
-          <p className="mt-2 text-xs leading-relaxed text-gray-500">{GRUNDSTEUER.note}<Cite n={1} /></p>
+          <p className="mt-2 text-xs leading-relaxed text-gray-500">{GRUNDSTEUER.note}<Cite n={2} /></p>
         </div>
       </Section>
 
@@ -180,13 +198,17 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
           ))}
         </ul>
         <p className="mt-3 text-xs text-gray-500">
-          Excluded as not "running costs": financing/interest, capital renovations, valuables (art) cover, and Hausverwaltung if outsourced.
+          Excluded entirely: financing/interest, renovations/capex, and contents/valuables (art) cover.
         </p>
         <ol className="mt-3 space-y-1 text-xs text-gray-500">
           {SOURCES.map((s) => (
             <li key={s.n}>
               <span className="text-gray-400">[{s.n}]</span>{' '}
-              <a href={s.url} target="_blank" rel="noreferrer" className="text-lake-600 hover:underline">{s.title} ↗</a>
+              {s.url ? (
+                <a href={s.url} target="_blank" rel="noreferrer" className="text-lake-600 hover:underline">{s.title} ↗</a>
+              ) : (
+                <span>{s.title}</span>
+              )}
             </li>
           ))}
         </ol>

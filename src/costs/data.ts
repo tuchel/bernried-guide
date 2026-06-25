@@ -1,91 +1,98 @@
-// Ground-up annual running-cost estimate for Reitweg 25.
-// Every figure is computed [C] or a sourced-range estimate [E]; 2025/26 prices, gross.
+// Annual running cost of Reitweg 25 — built from the OWNER'S OWN operating-cost
+// statement (16 line items, average monthly costs; provided privately, dated Dec 2025,
+// "without guarantee, subject to change"). Monthly figures are annualized ×12.
+// The only line we add is a capital-repair reserve — the owner's sheet explicitly
+// excludes repairs — and it is flagged `estimate`.
 
-export type CostGroup = 'Upkeep reserve' | 'Energy' | 'Labor & grounds' | 'Tax & insurance' | 'Utilities & other'
+export type CostGroup =
+  | 'Labor & grounds'
+  | 'Energy'
+  | 'Water & sewer'
+  | 'Tax & insurance'
+  | 'Services & media'
+  | 'Repair reserve'
 
 export interface CostItem {
   label: string
-  basis: string
-  low: number
-  point: number
-  high: number
+  monthly: number | null // owner-reported €/month (null for our reserve add-on)
+  annual: number
   group: CostGroup
-  computed?: boolean
-  src?: number
+  basis: string
+  estimate?: boolean // true = our addition, not on the owner's sheet
 }
 
+// Owner's 16 line items, ordered by annual cost; reserve add-on last.
 export const COSTS: CostItem[] = [
-  { label: 'Grundsteuer (property tax)', basis: 'Bavaria area model · Bernried 340% Hebesatz (official Satzung)', low: 1109, point: 1109, high: 1109, group: 'Tax & insurance', computed: true, src: 1 },
-  { label: 'Insurance (buildings + liability + contents)', basis: 'Rebuild value ~€2–3M; +Elementar, Privathaftpflicht, Hausrat', low: 1800, point: 2990, high: 5770, group: 'Tax & insurance', src: 2 },
-  { label: 'Heating — gas', basis: '~488 m² + guest house × 139 kWh/m² × ~€0.10/kWh', low: 7014, point: 9908, high: 11809, group: 'Energy', computed: true, src: 3 },
-  { label: 'Pool heating', basis: '16×4 m outdoor; cover saves ~€3k/season', low: 1430, point: 1700, high: 5500, group: 'Energy', src: 4 },
-  { label: 'Electricity', basis: 'Villa + pool pump + electric sauna; ~10–18k kWh', low: 2660, point: 4000, high: 6660, group: 'Energy', src: 5 },
-  { label: 'Water + wastewater', basis: 'Fresh €1.14/m³ + Grundgebühr; Abwasser €4.52/m³ (official rates)', low: 1100, point: 1600, high: 2400, group: 'Utilities & other', src: 6 },
-  { label: 'Chimney sweep', basis: 'Mandatory; gas + open + gas fireplaces', low: 135, point: 175, high: 250, group: 'Utilities & other', computed: true, src: 7 },
-  { label: 'Waste (Müllgebühren)', basis: 'Landkreis Weilheim-Schongau', low: 300, point: 420, high: 560, group: 'Utilities & other', src: 8 },
-  { label: 'Garden maintenance', basis: '3,887 m² park-like estate; ~80–220 h × €50/h', low: 4000, point: 7000, high: 11000, group: 'Labor & grounds', src: 9 },
-  { label: 'Pool service', basis: 'Seasonal open/close + chemicals (excl. energy)', low: 500, point: 900, high: 1400, group: 'Labor & grounds', src: 4 },
-  { label: 'Housekeeping', basis: '488 m² + guest house; ~8–16 h/wk (Minijob→agency)', low: 6400, point: 10000, high: 24000, group: 'Labor & grounds', src: 10 },
-  { label: 'Maintenance reserve', basis: 'Building ~€1.5–2.2M; Peters’sche Formel / 1–1.5%', low: 18000, point: 28000, high: 41000, group: 'Upkeep reserve', computed: true, src: 11 },
-  { label: 'Heating service + alarm + internet + Rundfunk', basis: 'Boiler service, Telenot monitoring, fibre+TV, €18.36/mo licence', low: 1435, point: 1870, high: 2370, group: 'Utilities & other', src: 12 },
+  { label: 'Garden maintenance', monthly: 1551.52, annual: 18618, group: 'Labor & grounds', basis: 'Full crew on the 3,887 m² park — pruning, mowing, plant & herb-garden care, paths' },
+  { label: 'Housekeeping incl. laundry', monthly: 1311.38, annual: 15737, group: 'Labor & grounds', basis: 'Billed by hours worked at €29/h + VAT' },
+  { label: 'Gas (heating)', monthly: 1248.0, annual: 14976, group: 'Energy', basis: 'Monthly advance; heats the 488 m² villa + pool' },
+  { label: 'Electricity', monthly: 412.0, annual: 4944, group: 'Energy', basis: 'Monthly advance payment' },
+  { label: 'Swimming pool', monthly: 370.68, annual: 4448, group: 'Labor & grounds', basis: 'Commissioning, winterization, monthly inspection, consumables (energy is in gas/electric)' },
+  { label: 'Building insurance', monthly: 327.87, annual: 3934, group: 'Tax & insurance', basis: 'Wohngebäudeversicherung' },
+  { label: 'Sewage charges', monthly: 252.37, annual: 3028, group: 'Water & sewer', basis: 'As itemized by the owner' },
+  { label: 'Wastewater charges', monthly: 235.66, annual: 2828, group: 'Water & sewer', basis: 'As itemized by the owner' },
+  { label: 'Alarm system', monthly: 145.27, annual: 1743, group: 'Services & media', basis: 'Monitoring + maintenance' },
+  { label: 'Heating maintenance', monthly: 122.17, annual: 1466, group: 'Services & media', basis: 'Service contract, excluding repairs' },
+  { label: 'Window/door maintenance', monthly: 96.75, annual: 1161, group: 'Services & media', basis: 'Service contract, excluding repairs' },
+  { label: 'Property tax (Grundsteuer)', monthly: 86.29, annual: 1035, group: 'Tax & insurance', basis: 'Bavaria area model — see derivation below' },
+  { label: 'Landline telephone', monthly: 67.82, annual: 814, group: 'Services & media', basis: 'Festnetz' },
+  { label: 'Internet (M-Net)', monthly: 45.21, annual: 543, group: 'Services & media', basis: 'Fibre' },
+  { label: 'Broadcasting fee (ARD/ZDF)', monthly: 18.36, annual: 220, group: 'Services & media', basis: 'Rundfunkbeitrag, €18.36/mo' },
+  { label: 'Cable TV (Vodafone)', monthly: 15.99, annual: 192, group: 'Services & media', basis: 'TV service' },
+  { label: 'Capital-repair reserve', monthly: null, annual: 28000, group: 'Repair reserve', basis: "NOT on the owner's sheet — set-aside for big-ticket repairs (roof, façade, technical systems). Peters'sche Formel / 1–1.5% of ~€1.5–2.2M rebuild", estimate: true },
 ]
 
 export const GROUP_COLORS: Record<CostGroup, string> = {
-  'Upkeep reserve': '#7f1d1d',
-  'Energy': '#ea580c',
   'Labor & grounds': '#ca8a04',
+  'Energy': '#ea580c',
+  'Water & sewer': '#0891b2',
   'Tax & insurance': '#245772',
-  'Utilities & other': '#5a8f4a',
+  'Services & media': '#5a8f4a',
+  'Repair reserve': '#7f1d1d',
 }
 
 export const TOTALS = {
-  allIn: { low: 45900, point: 69700, high: 113800 },
-  cash: { low: 27900, point: 41700, high: 72800 }, // excludes the maintenance-reserve set-aside
-  reserve: 28000,
-  pctOfPrice: 0.71, // point all-in / €9.75M
+  monthly: 6307, // owner-reported average €/month (exact €6,307.34)
+  operating: 75688, // owner total ×12, excludes capital repairs
+  reserve: { low: 18000, point: 28000, high: 41000 },
+  allIn: { low: 93700, point: 103700, high: 116700 }, // operating + reserve
+  discretionary: 34355, // garden + housekeeping
+  core: 41333, // operating − discretionary
+  pctOperating: 0.78, // operating / €9.75M
+  pctAllIn: 1.06, // all-in point / €9.75M
 }
 
 export const GRUNDSTEUER = {
-  result: 1109,
+  result: 1035,
   steps: [
     { label: 'Land', calc: '3,887 m² × €0.04/m²', value: '€155.48' },
     { label: 'Building', calc: '488 m² × €0.50/m² × 70% (residential)', value: '€170.80' },
     { label: 'Messbetrag', calc: '€155.48 + €170.80', value: '€326.28' },
-    { label: 'Grundsteuer', calc: '€326.28 × 340% (Bernried Hebesatz)', value: '€1,109/yr' },
+    { label: 'Grundsteuer', calc: '€326.28 × ~320–340% (Bernried Hebesatz)', value: '€1,044–1,109' },
   ],
-  note: 'Bavaria’s Grundsteuer is purely area-based since 2025 — it does NOT scale with the €9.75M price. Bernried’s Hebesatz is 340% per the official Hebesatzsatzung (effective 1 Jan 2025); the 320% still shown on tax-comparison sites is the superseded pre-reform rate.',
+  note: "The owner's sheet reports €1,035/yr; the Bavarian area model independently derives ~€1,044–1,109. Both confirm property tax is ~€1,000/yr and — unlike the price — does NOT scale with the €9.75M value. (Bavaria's Grundsteuer has been purely area-based since 2025.)",
 }
 
-export const EXEC_SUMMARY = `Running this house costs an estimated **~€70,000 a year, all-in** — about 0.71% of the €9.75M price. Roughly €42,000 of that is actual cash out the door; the rest (~€28,000) is a maintenance reserve you set aside for the lumpy reality of keeping a premium, 1970-built, 488 m² villa in top condition (the Peters’sche Formel and the 1–1.5%-of-rebuild-value rule both land there).
+export const EXEC_SUMMARY = `The owner reports an average **€6,307 a month — €75,688 a year** — to run Reitweg 25. These are operating costs only: the sheet's maintenance lines are explicitly "excluding repairs." That's about 0.78% of the €9.75M price.
 
-Where the money goes: the upkeep reserve and labor dominate. Energy is the biggest hard bill — ~€10k/yr to heat 488 m² at energy class E on gas, plus ~€1,700 to heat the outdoor pool (a cover swings that by ~€3k). Housekeeping for the main house + guest house runs ~€10k, and roughly doubles if you go above the Minijob cap to an agency. The 3,887 m² park-like garden is ~€7k.
+Two line items dominate and are largely discretionary: the **garden at €18,618/yr** (a full crew on the 3,887 m² park) and **housekeeping at €15,737/yr** (incl. laundry, billed at €29/h + VAT). Together they are €34,355 — **45% of the bill** — and a new owner could dial that service level up or down. Strip them out and the core, hard-to-avoid operating cost is **~€41,300/yr**.
 
-The pleasant surprise is property tax: Bavaria’s new area-based Grundsteuer is just ~€1,109/year and doesn’t scale with the €9.75M value at all. Insurance (buildings + liability + contents) is ~€3,000.
+Energy is the largest fixed cost: **gas €14,976/yr** (heating the 488 m² villa + pool) plus **electricity €4,944**. Water and sewer run €5,856, building insurance €3,934, and the alarm/maintenance/telecom block ~€6,100. **Property tax is just €1,035/yr** — Bavaria's area model doesn't scale with the €9.75M value (an independent derivation lands at ~€1,044–1,109, confirming it).
 
-The biggest swings are housekeeping intensity (€6k–24k), the maintenance reserve (€18k–41k), and pool heating — together they stretch the all-in range to roughly €46k–€115k.
+What the sheet does NOT include is **capital repairs**. For a premium 1970-built villa, a prudent reserve for the lumpy big-ticket items (roof, façade, technical systems) is ~€18–41k/yr. Adding the ~€28k midpoint puts the true all-in carrying cost near **~€104,000/yr (~1.1%)**.
 
-Excluded: financing/interest, capex/renovations, contents cover for art, and a precise flood-class (Elementar) rate. Both local figures are now confirmed from Bernried’s own bylaws — the Grundsteuer Hebesatz is 340% (the 320% on comparison sites is the pre-reform rate) and fresh water is €1.14/m³ — so everything here is computed or sourced.`
+These are the owner's own averaged figures ("without guarantee, subject to change"), annualized ×12.`
 
 export const ASSUMPTIONS = [
-  'Grundsteuer uses Bernried’s official 340% Hebesatz (Hebesatzsatzung, effective 1 Jan 2025) on the Bavarian area model — the 320% on comparison sites is the superseded pre-reform rate.',
-  'Fresh water is Bernried’s official €1.14/m³ (BGS-WAS §10) + ~€41–80/yr Grundgebühr by meter size; wastewater is €4.52/m³ (Abwasserverband Starnberger See), with garden/pool water on a separate Gartenzähler exempt from the wastewater charge.',
-  'Pool heating assumes a cover at low/point; without one, add ~€3,000.',
-  'Housekeeping above the Minijob cap (~10–12 h/wk) must move to an agency at €22–35/h all-in, which roughly doubles it.',
-  'Maintenance reserve is a budget set-aside, not a guaranteed yearly bill — real repair spend is lumpy across years.',
+  "Figures are the owner's averaged monthly operating costs (statement dated Dec 2025, marked “without guarantee, subject to change”), annualized ×12.",
+  "They exclude capital repairs — the heating and window/door maintenance lines are explicitly “excluding repairs.” The €18–41k/yr repair reserve is our addition, not the owner's.",
+  'Garden (€18.6k) and housekeeping (€15.7k) reflect the current premium service level and are largely discretionary — a new owner could spend materially less or more.',
+  "Fresh-water supply isn't a separate line on the owner's sheet; the two charges shown (wastewater €2,828 + sewage €3,028) total €5,856/yr.",
+  "The owner's property tax (€1,035/yr) sits just below the area-model derivation (~€1,044–1,109) — consistent, and trivial against the price either way.",
 ]
 
 export const SOURCES: { n: number; title: string; url: string }[] = [
-  { n: 1, title: 'Bernried Hebesatzsatzung — Grundsteuer A & B 340% (official, effective 2025)', url: 'https://bernried.de/media/download/cms/media/files/rathaus/satzungen/grundsteuerhebesaetze/hebesatzsatzung-2025.pdf' },
-  { n: 2, title: 'Finanztip — Wohngebäude / Elementar / Privathaftpflicht', url: 'https://www.finanztip.de/wohngebaeudeversicherungen/' },
-  { n: 3, title: 'Gaspreis 2026 (Finanztip)', url: 'https://www.finanztip.de/gaspreisvergleich/gaspreis-gaskosten/' },
-  { n: 4, title: 'Pool heating & service costs', url: 'https://www.primepool.de/ratgeber/pool-heizung-im-vergleich' },
-  { n: 5, title: 'Strompreis 2026 (strom-report)', url: 'https://strom-report.com/strompreise/' },
-  { n: 6, title: 'Bernried BGS-WAS — fresh water €1.14/m³ + Grundgebühr (§§9a–10)', url: 'https://bernried.de/media/download/cms/media/files/rathaus/buergerservice/satzungen/bgs-was/2024-10-18-beitrags-und-gebuehrensatzung.pdf' },
-  { n: 7, title: 'Schornsteinfeger KÜO Gebührentabelle', url: 'https://www.gesetze-im-internet.de/k_o/' },
-  { n: 8, title: 'Landkreis Weilheim-Schongau Abfallgebühren', url: 'https://www.weilheim-schongau.de/' },
-  { n: 9, title: 'Gartenpflege Kosten (rates)', url: 'https://handwerkerkosten.net/gartenpflege-kosten/' },
-  { n: 10, title: 'Haushaltshilfe Kosten (Finanztip)', url: 'https://www.finanztip.de/haushaltshilfe-kosten/' },
-  { n: 11, title: 'Peters’sche Formel / Instandhaltungsrücklage', url: 'https://www.haufe.de/id/beitrag/erhaltungsruecklage-32-peterssche-formel-HI14945423.html' },
-  { n: 12, title: 'Rundfunkbeitrag €18.36/mo', url: 'https://www.finanztip.de/rundfunkbeitrag' },
-  { n: 13, title: 'Abwasserverband Starnberger See — wastewater €4.52/m³', url: 'https://www.av-starnberger-see.de/beitraege-gebuehren.html' },
+  { n: 1, title: "Owner's operating-cost statement (Dec 2025) — provided privately, not public", url: '' },
+  { n: 2, title: 'Bernried Hebesatzsatzung — Grundsteuer Hebesatz (official)', url: 'https://bernried.de/media/download/cms/media/files/rathaus/satzungen/grundsteuerhebesaetze/hebesatzsatzung-2025.pdf' },
+  { n: 3, title: "Peters'sche Formel / Instandhaltungsrücklage (repair reserve)", url: 'https://www.haufe.de/id/beitrag/erhaltungsruecklage-32-peterssche-formel-HI14945423.html' },
 ]
