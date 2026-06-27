@@ -153,6 +153,7 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
   const portfolioUsd = inp.spacexShares * inp.spacexPrice + inp.tslaValue + inp.googValue + inp.cashUsd
   const portfolioEur = portfolioUsd / inp.eurUsd
   const houseShare = inp.housePriceEur / (portfolioEur + inp.housePriceEur)
+  const d0 = sel.deterministic[0].comp // asset split at purchase (after t=0 funding + diversification)
 
   return (
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
@@ -259,7 +260,13 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
               </div>
             </label>
             <Pct label="Hybrid: share funded by selling" value={inp.hybridSellPct} max={1} onChange={(v) => set({ hybridSellPct: v })} />
+            <Pct label="Diversify SpaceX now (one-time sale)" value={inp.spacexInitialDivPct} max={1} onChange={(v) => set({ spacexInitialDivPct: v })} />
             <Pct label="Move SpaceX → diversified / yr (de-risk)" value={inp.spacexTrimPct} max={0.25} onChange={(v) => set({ spacexTrimPct: v })} />
+            {inp.spacexInitialDivPct > 0 && (
+              <p className="rounded-md bg-lake-50 p-2 text-[11px] leading-snug text-lake-900 sm:col-span-2">
+                One-time sale → <strong>{fmtEur(d0.div)}</strong> now in diversified. The $0-basis sale is taxed first (~{pct(inp.capGainsRate)}), so only the after-tax amount lands there — the tax shows up in “Up-front tax to buy.” At purchase: SpaceX {fmtEur(d0.spacex)} · Diversified {fmtEur(d0.div)}.
+              </p>
+            )}
           </Group>
 
           <Group title="Holdings (USD)">

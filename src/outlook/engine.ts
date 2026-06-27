@@ -62,6 +62,7 @@ export interface Inputs {
   sblocMaxLtv: number
   strategy: Strategy
   hybridSellPct: number
+  spacexInitialDivPct: number // one-time fraction of SpaceX sold into diversified at t=0
   spacexTrimPct: number // fraction of remaining SpaceX sold each year → diversified bucket
   mcPaths: number
 }
@@ -173,6 +174,20 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   let cumInterestEur = 0
   let ruinYear: number | null = null
 
+  // Sell a fraction of SpaceX, pay cap-gains tax on the gain, and move ONLY the after-tax
+  // proceeds into the diversified bucket — you never get 100% of the proceeds reinvested.
+  const diversifySpacex = (frac: number) => {
+    if (frac <= 0 || spacex.value <= 1) return
+    const sellV = spacex.value * frac
+    const tax = Math.max(0, sellV * (1 - spacex.basis / spacex.value)) * inp.capGainsRate
+    cumTaxEur += tax / fx
+    spacex.value -= sellV
+    spacex.basis -= spacex.basis * frac
+    const net = sellV - tax
+    div.value += net
+    div.basis += net
+  }
+
   // t=0 — buy the house per strategy, then pay one-off setup capex
   if (inp.strategy === 'outright') {
     const { taxUsd, short } = raiseNet(cashRef, holdings, inp.housePriceEur * fx, inp.capGainsRate)
@@ -212,6 +227,9 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
     cumTaxEur += rc.taxUsd / fx
     if (rc.short) ruinYear = 0
   }
+  // One-time SpaceX diversification at purchase (after funding the house, so the freshly
+  // diversified bucket isn't immediately re-sold to cover the purchase).
+  diversifySpacex(inp.spacexInitialDivPct)
 
   const rows: YearRow[] = []
   const record = (year: number, burnEur: number, marginCallEur: number) => {
@@ -268,16 +286,7 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
     }
 
     // Annual SpaceX de-risking trim → reinvest after-tax into the diversified bucket
-    if (inp.spacexTrimPct > 0 && spacex.value > 1) {
-      const sellV = spacex.value * inp.spacexTrimPct
-      const tax = Math.max(0, sellV * (1 - spacex.basis / spacex.value)) * inp.capGainsRate
-      cumTaxEur += tax / fx
-      spacex.value -= sellV
-      spacex.basis -= spacex.basis * inp.spacexTrimPct
-      const net = sellV - tax
-      div.value += net
-      div.basis += net
-    }
+    diversifySpacex(inp.spacexTrimPct)
 
     // Living costs (inflated) + interest-only debt + optional wealth tax, funded by drawdown
     const infl = Math.pow(1 + inp.inflation, year)

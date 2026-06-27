@@ -51,6 +51,7 @@ export const DEFAULTS: Inputs = {
   sblocMaxLtv: 0.4, // concentrated single-stock advance rate
   strategy: 'hybrid',
   hybridSellPct: 0.5,
+  spacexInitialDivPct: 0,
   spacexTrimPct: 0,
   mcPaths: 2000,
 }
