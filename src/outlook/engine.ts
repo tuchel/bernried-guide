@@ -7,25 +7,24 @@
 // the same annual drawdown loop, deterministically or as a Monte Carlo cloud.
 //
 // Returns: μ is the TYPICAL (median) annual return — the median path (all shocks 0) grows at
-// exactly (1+μ). Single-stock medians are set below index averages on purpose (most single
-// stocks lag the index over decades). Volatility spreads the cone; `meanReversion` (0 = random
-// walk; >0 = AR(1) pull toward the median path) caps long-horizon dispersion so 50%+ single-stock
-// vol doesn't fan out to an absurd range over 30y. A separate `impairProb` jump models the one
-// thing a log-normal cannot: a concentrated position permanently cratering.
+// exactly (1+μ). Volatility spreads the cone; `meanReversion` (AR(1)) caps long-horizon spread;
+// `impairProb` is the jump a log-normal can't make (a concentrated position permanently cratering).
+// Each year also records a cash-flow breakdown (sources, uses, and the traced SpaceX→diversified
+// conversion) for the per-year flow diagram.
 
 export type Strategy = 'outright' | 'borrow' | 'hybrid'
 
 export interface AssetInput {
-  mu: number // typical (median) nominal annual total return
-  sigma: number // annual volatility (log)
-  beta: number // correlation to the common market factor (0..1); pairwise corr = sqrt(beta_i*beta_j)
+  mu: number
+  sigma: number
+  beta: number
 }
 
 export interface Inputs {
   horizon: number
   housePriceEur: number
   houseGrowth: number
-  setupCapexEur: number // one-off furnishing/renovation at purchase
+  setupCapexEur: number
   spacexShares: number
   spacexPrice: number
   spacexBasisPerShare: number
@@ -39,14 +38,14 @@ export interface Inputs {
   tsla: AssetInput
   goog: AssetInput
   div: AssetInput
-  eurUsd: number // USD per 1 EUR
+  eurUsd: number
   fxDrift: number
   fxVol: number
-  meanReversion: number // 0..~0.3; AR(1) pull on log-deviations (0 = pure random walk)
-  impairProb: number // annual probability SpaceX permanently impairs (MC only)
-  impairTo: number // residual fraction it drops to if it impairs
+  meanReversion: number
+  impairProb: number
+  impairTo: number
   capGainsRate: number
-  wealthTaxRate: number // annual German wealth-tax scenario (0 = none today)
+  wealthTaxRate: number
   burnHouseOps: number
   burnSchooling: number
   burnChildcare: number
@@ -54,17 +53,17 @@ export interface Inputs {
   burnGeneral: number
   burnTravel: number
   burnInsurance: number
-  burnAdvisory: number // cross-border US+DE tax/legal/advisory
+  burnAdvisory: number
   inflation: number
   mortgageLtv: number
   mortgageRate: number
   sblocRate: number
   sblocMaxLtv: number
-  loanTermYears: number // amortize debt over N years (1..30); >30 = never (interest-only)
+  loanTermYears: number
   strategy: Strategy
   hybridSellPct: number
-  spacexInitialDivPct: number // one-time fraction of SpaceX sold into diversified at t=0
-  spacexTrimPct: number // fraction of remaining SpaceX sold each year → diversified bucket
+  spacexInitialDivPct: number
+  spacexTrimPct: number
   mcPaths: number
 }
 
@@ -74,6 +73,28 @@ export interface Composition {
   goog: number
   div: number
   cash: number
+}
+
+// Per-year cash flows, in EUR. Sources fund uses; the two sides balance.
+export interface YearFlow {
+  sellSpacex: number
+  sellTsla: number
+  sellGoog: number
+  sellDiv: number
+  cash: number
+  loan: number
+  // uses
+  tax: number
+  house: number
+  setup: number
+  living: number
+  interest: number
+  principal: number
+  wealthTax: number
+  toDiv: number
+  // traced SpaceX → diversified conversion (gross sold for diversification, and its tax)
+  spacexToDivGross: number
+  divTax: number
 }
 
 export interface YearRow {
@@ -87,6 +108,7 @@ export interface YearRow {
   burnEur: number
   marginCallEur: number
   comp: Composition
+  flow: YearFlow
 }
 
 export interface PathResult {
@@ -94,11 +116,27 @@ export interface PathResult {
   ruinYear: number | null
 }
 
+type HoldKey = 'spacex' | 'tsla' | 'goog' | 'div'
 interface Holding {
+  key: HoldKey
   value: number
   basis: number
   dev: number
   a: AssetInput
+}
+
+function makeFlow(): YearFlow {
+  return {
+    sellSpacex: 0, sellTsla: 0, sellGoog: 0, sellDiv: 0, cash: 0, loan: 0,
+    tax: 0, house: 0, setup: 0, living: 0, interest: 0, principal: 0, wealthTax: 0, toDiv: 0,
+    spacexToDivGross: 0, divTax: 0,
+  }
+}
+function addSell(flow: YearFlow, key: HoldKey, grossUsd: number) {
+  if (key === 'spacex') flow.sellSpacex += grossUsd
+  else if (key === 'tsla') flow.sellTsla += grossUsd
+  else if (key === 'goog') flow.sellGoog += grossUsd
+  else flow.sellDiv += grossUsd
 }
 
 function mulberry32(seed: number) {
@@ -117,18 +155,19 @@ function gaussian(u: () => number) {
 }
 
 // Raise `targetNetUsd` of cash: spend cash first (no gain), then sell holdings in order of least
-// taxable gain per dollar. Mutates holdings; returns realized tax (USD) and whether it fell short.
+// taxable gain per dollar. Mutates holdings; records sources + tax into `flow`; returns short flag.
 function raiseNet(
   cashRef: { v: number },
   holdings: Holding[],
   targetNetUsd: number,
   rate: number,
-): { taxUsd: number; short: boolean } {
+  flow: YearFlow,
+): { short: boolean } {
   let need = targetNetUsd
-  let taxUsd = 0
-  if (need <= 0) return { taxUsd, short: false }
+  if (need <= 0) return { short: false }
   const useCash = Math.min(cashRef.v, need)
   cashRef.v -= useCash
+  flow.cash += useCash
   need -= useCash
   const order = holdings
     .filter((h) => h.value > 1)
@@ -139,19 +178,21 @@ function raiseNet(
     const netPerValue = 1 - gainFrac * rate
     const maxNet = h.value * netPerValue
     if (maxNet <= need + 1e-6) {
-      taxUsd += Math.max(0, h.value - h.basis) * rate
+      flow.tax += Math.max(0, h.value - h.basis) * rate
+      addSell(flow, h.key, h.value)
       need -= maxNet
       h.value = 0
       h.basis = 0
     } else {
       const f = need / maxNet
-      taxUsd += Math.max(0, h.value - h.basis) * f * rate
+      flow.tax += Math.max(0, h.value - h.basis) * f * rate
+      addSell(flow, h.key, h.value * f)
       h.value -= h.value * f
       h.basis -= h.basis * f
       need = 0
     }
   }
-  return { taxUsd, short: need > 1 }
+  return { short: need > 1 }
 }
 
 export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): PathResult {
@@ -159,15 +200,15 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   const phi = 1 - Math.max(0, Math.min(0.95, inp.meanReversion))
 
   const holdings: Holding[] = [
-    { value: inp.spacexShares * inp.spacexPrice, basis: inp.spacexShares * inp.spacexBasisPerShare, dev: 0, a: inp.spacex },
-    { value: inp.tslaValue, basis: inp.tslaBasis, dev: 0, a: inp.tsla },
-    { value: inp.googValue, basis: inp.googBasis, dev: 0, a: inp.goog },
-    { value: 0, basis: 0, dev: 0, a: inp.div },
+    { key: 'spacex', value: inp.spacexShares * inp.spacexPrice, basis: inp.spacexShares * inp.spacexBasisPerShare, dev: 0, a: inp.spacex },
+    { key: 'tsla', value: inp.tslaValue, basis: inp.tslaBasis, dev: 0, a: inp.tsla },
+    { key: 'goog', value: inp.googValue, basis: inp.googBasis, dev: 0, a: inp.goog },
+    { key: 'div', value: 0, basis: 0, dev: 0, a: inp.div },
   ]
   const spacex = holdings[0]
   const div = holdings[3]
   const cashRef = { v: inp.cashUsd }
-  let fx = inp.eurUsd > 0 ? inp.eurUsd : 1 // guard against a cleared / zero EUR/USD input
+  let fx = inp.eurUsd > 0 ? inp.eurUsd : 1
   let house = 0
   let mortgage = 0
   let ploan = 0
@@ -176,64 +217,59 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   let ruinYear: number | null = null
 
   // Sell a fraction of SpaceX, pay cap-gains tax on the gain, and move ONLY the after-tax
-  // proceeds into the diversified bucket — you never get 100% of the proceeds reinvested.
-  const diversifySpacex = (frac: number) => {
+  // proceeds into the diversified bucket — never 100% of proceeds reinvested. Records the
+  // traced conversion into `flow`.
+  const diversifySpacex = (frac: number, flow: YearFlow) => {
     if (frac <= 0 || spacex.value <= 1) return
     const sellV = spacex.value * frac
     const tax = Math.max(0, sellV * (1 - spacex.basis / spacex.value)) * inp.capGainsRate
-    cumTaxEur += tax / fx
     spacex.value -= sellV
     spacex.basis -= spacex.basis * frac
     const net = sellV - tax
     div.value += net
     div.basis += net
+    flow.sellSpacex += sellV
+    flow.spacexToDivGross += sellV
+    flow.tax += tax
+    flow.divTax += tax
+    flow.toDiv += net
   }
 
-  // t=0 — buy the house per strategy, then pay one-off setup capex
+  // t=0 — buy the house per strategy, then setup capex, then optional one-time diversification
+  const f0 = makeFlow()
   if (inp.strategy === 'outright') {
-    const { taxUsd, short } = raiseNet(cashRef, holdings, inp.housePriceEur * fx, inp.capGainsRate)
-    cumTaxEur += taxUsd / fx
-    if (short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, inp.housePriceEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    f0.house += inp.housePriceEur * fx
   } else if (inp.strategy === 'borrow') {
     mortgage = inp.housePriceEur * inp.mortgageLtv
     let remEur = inp.housePriceEur - mortgage
     const portfolioEur = holdings.reduce((s, h) => s + h.value, 0) / fx
     ploan = Math.min(remEur, inp.sblocMaxLtv * portfolioEur)
     remEur -= ploan
-    if (remEur > 0) {
-      const { taxUsd, short } = raiseNet(cashRef, holdings, remEur * fx, inp.capGainsRate)
-      cumTaxEur += taxUsd / fx
-      if (short) ruinYear = 0
-    }
+    if (remEur > 0 && raiseNet(cashRef, holdings, remEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    f0.loan += (mortgage + ploan) * fx
+    f0.house += inp.housePriceEur * fx
   } else {
     const sellEur = inp.housePriceEur * inp.hybridSellPct
-    const r1 = raiseNet(cashRef, holdings, sellEur * fx, inp.capGainsRate)
-    cumTaxEur += r1.taxUsd / fx
-    if (r1.short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, sellEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
     const borrowEur = inp.housePriceEur - sellEur
     mortgage = Math.min(borrowEur, inp.housePriceEur * inp.mortgageLtv)
     const afterMortEur = borrowEur - mortgage
     const portfolioEur = holdings.reduce((s, h) => s + h.value, 0) / fx
     ploan = Math.min(afterMortEur, inp.sblocMaxLtv * portfolioEur)
     const unfundedEur = afterMortEur - ploan
-    if (unfundedEur > 0) {
-      const r2 = raiseNet(cashRef, holdings, unfundedEur * fx, inp.capGainsRate)
-      cumTaxEur += r2.taxUsd / fx
-      if (r2.short) ruinYear = 0
-    }
+    if (unfundedEur > 0 && raiseNet(cashRef, holdings, unfundedEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    f0.loan += (mortgage + ploan) * fx
+    f0.house += inp.housePriceEur * fx
   }
   house = inp.housePriceEur
   if (inp.setupCapexEur > 0) {
-    const rc = raiseNet(cashRef, holdings, inp.setupCapexEur * fx, inp.capGainsRate)
-    cumTaxEur += rc.taxUsd / fx
-    if (rc.short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, inp.setupCapexEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    f0.setup += inp.setupCapexEur * fx
   }
-  // One-time SpaceX diversification at purchase (after funding the house, so the freshly
-  // diversified bucket isn't immediately re-sold to cover the purchase).
-  diversifySpacex(inp.spacexInitialDivPct)
+  diversifySpacex(inp.spacexInitialDivPct, f0)
+  cumTaxEur += f0.tax / fx
 
-  // Loan amortization schedule: a constant annuity that retires each loan over loanTermYears.
-  // loanTermYears > 30 → "never" (interest-only, debt rides forever). Computed off the t=0 balances.
   const amortize = inp.loanTermYears >= 1 && inp.loanTermYears <= 30
   const annuity = (P: number, r: number) =>
     amortize && P > 0 ? (r > 0 ? (P * r) / (1 - Math.pow(1 + r, -inp.loanTermYears)) : P / inp.loanTermYears) : 0
@@ -241,9 +277,10 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   const ploanAnnuity = annuity(ploan, inp.sblocRate)
 
   const rows: YearRow[] = []
-  const record = (year: number, burnEur: number, marginCallEur: number) => {
+  const record = (year: number, burnEur: number, marginCallEur: number, flow: YearFlow) => {
     const liquidUsd = cashRef.v + holdings.reduce((s, h) => s + h.value, 0)
     const liquidEur = liquidUsd / fx
+    const e = (v: number) => v / fx // flows recorded in USD → EUR at this year's fx
     rows.push({
       year,
       netWorthEur: liquidEur + house - mortgage - ploan,
@@ -261,12 +298,18 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
         div: holdings[3].value / fx,
         cash: cashRef.v / fx,
       },
+      flow: {
+        sellSpacex: e(flow.sellSpacex), sellTsla: e(flow.sellTsla), sellGoog: e(flow.sellGoog), sellDiv: e(flow.sellDiv),
+        cash: e(flow.cash), loan: e(flow.loan), tax: e(flow.tax), house: e(flow.house), setup: e(flow.setup),
+        living: e(flow.living), interest: e(flow.interest), principal: e(flow.principal), wealthTax: e(flow.wealthTax),
+        toDiv: e(flow.toDiv), spacexToDivGross: e(flow.spacexToDivGross), divTax: e(flow.divTax),
+      },
     })
   }
-  record(0, 0, 0)
+  record(0, 0, 0, f0)
 
   for (let year = 1; year <= inp.horizon; year++) {
-    // Asset growth: median path grows at (1+μ); AR(1) deviation adds bounded volatility.
+    const flow = makeFlow()
     const m = stochastic ? gaussian(u) : 0
     for (const h of holdings) {
       if (h.value <= 0 && h !== div) continue
@@ -280,10 +323,8 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
         h.value *= 1 + h.a.mu
       }
     }
-    // Permanent impairment jump on the dominant single position (MC only) — the one tail a
-    // log-normal can't produce: fraud, technical failure, valuation reset that never recovers.
     if (stochastic && inp.impairProb > 0 && spacex.value > 1 && u() < inp.impairProb) {
-      spacex.value *= inp.impairTo // basis unchanged: a real market loss
+      spacex.value *= inp.impairTo
     }
     cashRef.v *= 1 + inp.cashRate
     house *= 1 + inp.houseGrowth
@@ -294,16 +335,12 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
       fx *= 1 + inp.fxDrift
     }
 
-    // Annual SpaceX de-risking trim → reinvest after-tax into the diversified bucket
-    diversifySpacex(inp.spacexTrimPct)
+    diversifySpacex(inp.spacexTrimPct, flow)
 
-    // Living costs (inflated) + interest-only debt + optional wealth tax, funded by drawdown
     const infl = Math.pow(1 + inp.inflation, year)
     const burnEur =
       (inp.burnHouseOps + inp.burnSchooling + inp.burnChildcare + inp.burnHealth + inp.burnGeneral +
         inp.burnTravel + inp.burnInsurance + inp.burnAdvisory) * infl
-    // Debt service: interest on the opening balance + scheduled principal (if amortizing).
-    // Paying principal means selling more assets now (realizing tax) to kill future interest.
     const interestEur = mortgage * inp.mortgageRate + ploan * inp.sblocRate
     const mortgagePrincipal = amortize ? Math.min(mortgage, Math.max(0, mortgageAnnuity - mortgage * inp.mortgageRate)) : 0
     const ploanPrincipal = amortize ? Math.min(ploan, Math.max(0, ploanAnnuity - ploan * inp.sblocRate)) : 0
@@ -313,27 +350,28 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
     const debtServiceEur = interestEur + mortgagePrincipal + ploanPrincipal
     const netWorthNowEur = cashRef.v / fx + holdings.reduce((s, h) => s + h.value, 0) / fx + house - mortgage - ploan
     const wealthTaxEur = inp.wealthTaxRate > 0 ? Math.max(0, netWorthNowEur) * inp.wealthTaxRate : 0
-    const r = raiseNet(cashRef, holdings, (burnEur + debtServiceEur + wealthTaxEur) * fx, inp.capGainsRate)
-    cumTaxEur += (r.taxUsd / fx) + wealthTaxEur
-    if (r.short && ruinYear === null) ruinYear = year
+    if (raiseNet(cashRef, holdings, (burnEur + debtServiceEur + wealthTaxEur) * fx, inp.capGainsRate, flow).short && ruinYear === null) ruinYear = year
+    flow.living += burnEur * fx
+    flow.interest += interestEur * fx
+    flow.principal += (mortgagePrincipal + ploanPrincipal) * fx
+    flow.wealthTax += wealthTaxEur * fx
 
-    // SBLOC margin call: a breach of the max LTV forces selling into the down market.
     let marginCallEur = 0
     if (ploan > 0) {
       const portUsd = cashRef.v + holdings.reduce((s, h) => s + h.value, 0)
       const ploanUsd = ploan * fx
       if (ploanUsd > inp.sblocMaxLtv * portUsd) {
         const grossUsd = (ploanUsd - inp.sblocMaxLtv * portUsd) / (1 - inp.sblocMaxLtv)
-        const rc = raiseNet(cashRef, holdings, grossUsd, inp.capGainsRate)
-        cumTaxEur += rc.taxUsd / fx
+        if (raiseNet(cashRef, holdings, grossUsd, inp.capGainsRate, flow).short && ruinYear === null) ruinYear = year
         const paydownUsd = Math.min(grossUsd, ploanUsd)
         ploan -= paydownUsd / fx
+        flow.principal += paydownUsd
         marginCallEur = paydownUsd / fx
-        if (rc.short && ruinYear === null) ruinYear = year
       }
     }
+    cumTaxEur += flow.tax / fx + wealthTaxEur
 
-    record(year, burnEur, marginCallEur)
+    record(year, burnEur, marginCallEur, flow)
   }
 
   return { rows, ruinYear }
@@ -399,7 +437,6 @@ export function runMonteCarlo(inp: Inputs): McResult {
   }
 }
 
-// ---- Strategy comparison (deterministic median path + MC summary) ----------
 export interface StrategyResult {
   strategy: Strategy
   deterministic: YearRow[]

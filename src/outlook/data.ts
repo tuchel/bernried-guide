@@ -23,10 +23,10 @@ export const DEFAULTS: Inputs = {
   cashRate: 0.035,
   // Return models: μ = median annual return, σ = annual log-vol, beta = market co-movement (ρ²).
   // Single-stock medians sit below index averages by design (idiosyncratic risk + skew).
-  spacex: { mu: 0.06, sigma: 0.6, beta: 0.35 },
-  tsla: { mu: 0.05, sigma: 0.55, beta: 0.5 },
+  spacex: { mu: 0.1, sigma: 0.6, beta: 0.35 },
+  tsla: { mu: 0.06, sigma: 0.55, beta: 0.5 },
   goog: { mu: 0.06, sigma: 0.32, beta: 0.6 },
-  div: { mu: 0.065, sigma: 0.17, beta: 0.9 }, // diversified index, median, net of ~0.5%/yr fund tax drag
+  div: { mu: 0.04, sigma: 0.17, beta: 0.9 }, // diversified index, median, net of ~0.5%/yr fund tax drag
   eurUsd: 1.12,
   fxDrift: 0,
   fxVol: 0.09,
@@ -37,13 +37,13 @@ export const DEFAULTS: Inputs = {
   capGainsRate: 0.30175,
   wealthTaxRate: 0, // no German wealth tax today; raise to stress the political-risk scenario
   burnHouseOps: 104_000,
-  burnSchooling: 50_000,
-  burnChildcare: 40_000,
-  burnHealth: 24_000,
-  burnGeneral: 120_000,
+  burnSchooling: 30_000,
+  burnChildcare: 50_000,
+  burnHealth: 40_000,
+  burnGeneral: 226_000, // set so total living costs = €500k/yr
   burnTravel: 30_000,
-  burnInsurance: 25_000, // property + liability + umbrella on a €10M villa
-  burnAdvisory: 50_000, // cross-border US+DE tax prep, FBAR/FATCA, planning
+  burnInsurance: 10_000, // property + liability + umbrella on a €10M villa
+  burnAdvisory: 10_000, // cross-border US+DE tax prep, FBAR/FATCA, planning
   inflation: 0.02,
   mortgageLtv: 0.6,
   mortgageRate: 0.038,

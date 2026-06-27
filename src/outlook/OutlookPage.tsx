@@ -1,12 +1,12 @@
 import { useDeferredValue, useMemo, useState } from 'react'
-import { runStrategy, type Inputs, type McResult, type Strategy, type YearRow } from './engine'
+import { runStrategy, type Inputs, type McResult, type Strategy, type YearFlow, type YearRow } from './engine'
 import { ASSUMPTIONS, DEFAULTS, INTRO, SOURCES, STRATEGY_BLURB, STRATEGY_COLOR, STRATEGY_LABEL } from './data'
 
 function fmtEur(n: number): string {
   const a = Math.abs(n)
   const s = n < 0 ? '−' : ''
   if (a >= 1e9) return `${s}€${(a / 1e9).toFixed(a >= 1e10 ? 1 : 2)}B`
-  if (a >= 1e6) return `${s}€${(a / 1e6).toFixed(a >= 1e8 ? 0 : 1)}M`
+  if (a >= 999_500) return `${s}€${(a / 1e6).toFixed(a >= 1e8 ? 0 : 1)}M`
   if (a >= 1e3) return `${s}€${Math.round(a / 1e3)}k`
   return `${s}€${Math.round(a)}`
 }
@@ -102,6 +102,89 @@ function CompositionChart({ rows }: { rows: YearRow[] }) {
   )
 }
 
+// ---- Per-year cash-flow Sankey (sources → uses; SpaceX→Diversified traced exactly) ----
+function FlowSankey({ flow }: { flow: YearFlow }) {
+  const sources = [
+    { key: 'spacex', label: 'SpaceX sale', color: '#1d6f8b', value: flow.sellSpacex },
+    { key: 'tsla', label: 'TSLA sale', color: '#b3402f', value: flow.sellTsla },
+    { key: 'goog', label: 'GOOG sale', color: '#5a8f4a', value: flow.sellGoog },
+    { key: 'divsale', label: 'Diversified sale', color: '#0e7490', value: flow.sellDiv },
+    { key: 'cash', label: 'Cash drawn', color: '#94a3b8', value: flow.cash },
+    { key: 'loan', label: 'Loan drawn', color: '#a16207', value: flow.loan },
+  ].filter((s) => s.value > 1)
+  const uses = [
+    { key: 'house', label: 'House', color: '#ca8a04', value: flow.house },
+    { key: 'setup', label: 'Furnishing', color: '#eab308', value: flow.setup },
+    { key: 'toDiv', label: '→ Diversified', color: '#0891b2', value: flow.toDiv },
+    { key: 'living', label: 'Living costs', color: '#5a8f4a', value: flow.living },
+    { key: 'interest', label: 'Loan interest', color: '#b3402f', value: flow.interest },
+    { key: 'principal', label: 'Loan principal', color: '#7f1d1d', value: flow.principal },
+    { key: 'tax', label: 'Cap-gains tax', color: '#374151', value: flow.tax },
+    { key: 'wealthTax', label: 'Wealth tax', color: '#6b7280', value: flow.wealthTax },
+  ].filter((u) => u.value > 1)
+  const total = Math.max(sources.reduce((s, x) => s + x.value, 0), uses.reduce((s, x) => s + x.value, 0))
+  if (!(total > 1) || sources.length === 0 || uses.length === 0)
+    return <p className="py-10 text-center text-sm text-gray-400">No cash moves this year — assets just compound.</p>
+
+  const W = 580, nodeW = 12, gap = 5, padT = 8, Havail = 300, leftX = 122, rightX = 446
+  const colGap = Math.max((sources.length - 1) * gap, (uses.length - 1) * gap)
+  const pxPerEur = Math.max(1e-9, (Havail - colGap - 2 * padT) / total)
+  let sy = padT
+  const srcNodes = sources.map((s) => { const h = s.value * pxPerEur; const n = { ...s, y: sy, h }; sy += h + gap; return n })
+  let uy = padT
+  const useNodes = uses.map((s) => { const h = s.value * pxPerEur; const n = { ...s, y: uy, h }; uy += h + gap; return n })
+  const srcIdx: Record<string, number> = {}; srcNodes.forEach((n, i) => (srcIdx[n.key] = i))
+  const useIdx: Record<string, number> = {}; useNodes.forEach((n, i) => (useIdx[n.key] = i))
+
+  type Link = { si: number; ui: number; v: number }
+  const links: Link[] = []
+  const remSrc = srcNodes.map((n) => n.value)
+  const remUse = useNodes.map((n) => n.value)
+  const trace = (sKey: string, uKey: string, v: number) => {
+    if (v <= 1 || srcIdx[sKey] == null || useIdx[uKey] == null) return
+    links.push({ si: srcIdx[sKey], ui: useIdx[uKey], v })
+    remSrc[srcIdx[sKey]] -= v; remUse[useIdx[uKey]] -= v
+  }
+  trace('spacex', 'toDiv', flow.toDiv) // the conversion: SpaceX → diversified (after-tax)
+  trace('spacex', 'tax', flow.divTax) // and its cap-gains tax
+  const remTotal = remSrc.reduce((s, x) => s + Math.max(0, x), 0)
+  if (remTotal > 1) {
+    for (let i = 0; i < srcNodes.length; i++)
+      for (let j = 0; j < useNodes.length; j++) {
+        const v = (Math.max(0, remSrc[i]) * Math.max(0, remUse[j])) / remTotal
+        if (v > total * 0.003) links.push({ si: i, ui: j, v })
+      }
+  }
+  links.sort((a, b) => a.si - b.si || a.ui - b.ui)
+  const srcCur = srcNodes.map((n) => n.y)
+  const useCur = useNodes.map((n) => n.y)
+  const midX = (leftX + nodeW + rightX) / 2
+  const ribbons = links.map((lk, i) => {
+    const h = lk.v * pxPerEur
+    const sy0 = srcCur[lk.si]; srcCur[lk.si] += h
+    const uy0 = useCur[lk.ui]; useCur[lk.ui] += h
+    const x1 = leftX + nodeW, x2 = rightX
+    return { key: i, color: srcNodes[lk.si].color, d: `M${x1},${sy0} C${midX},${sy0} ${midX},${uy0} ${x2},${uy0} L${x2},${uy0 + h} C${midX},${uy0 + h} ${midX},${sy0 + h} ${x1},${sy0 + h} Z` }
+  })
+  return (
+    <svg viewBox={`0 0 ${W} ${Havail}`} width="100%" height="auto" className="overflow-visible">
+      {ribbons.map((r) => <path key={r.key} d={r.d} fill={r.color} opacity="0.22" />)}
+      {srcNodes.map((n) => (
+        <g key={n.key}>
+          <rect x={leftX} y={n.y} width={nodeW} height={Math.max(1, n.h)} fill={n.color} rx="1" />
+          <text x={leftX - 6} y={n.y + n.h / 2 + 3.5} fontSize="9.5" fill="#374151" textAnchor="end">{n.label} · {fmtEur(n.value)}</text>
+        </g>
+      ))}
+      {useNodes.map((n) => (
+        <g key={n.key}>
+          <rect x={rightX} y={n.y} width={nodeW} height={Math.max(1, n.h)} fill={n.color} rx="1" />
+          <text x={rightX + nodeW + 6} y={n.y + n.h / 2 + 3.5} fontSize="9.5" fill="#374151">{n.label} · {fmtEur(n.value)}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
 function Num({ label, value, onChange, step = 1, suffix, hint }: { label: string; value: number; onChange: (v: number) => void; step?: number; suffix?: string; hint?: string }) {
   return (
     <label className="block">
@@ -135,6 +218,7 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
   const [inp, setInp] = useState<Inputs>(DEFAULTS)
   const [selected, setSelected] = useState<Strategy>('hybrid')
   const [stackAll, setStackAll] = useState(false)
+  const [flowYear, setFlowYear] = useState(0)
   const deferred = useDeferredValue(inp)
   const results = useMemo(
     () => ({
@@ -246,6 +330,22 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
           <CompositionChart rows={sel.deterministic} />
           <p className="mt-1 text-[10px] text-gray-400">
             Dashed line = net worth after debt. Turn up “Move SpaceX → diversified” below to watch the concentration shift into the safer bucket over time.
+          </p>
+        </figure>
+
+        {/* Per-year cash-flow Sankey */}
+        <figure className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
+          <figcaption className="mb-1 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-gray-800">
+            <span>Where the money flows — {flowYear === 0 ? 'year 0 (purchase)' : `year ${flowYear}`}, {STRATEGY_LABEL[selected]}</span>
+            <span className="text-[10px] font-normal text-gray-500">cash in (left) → out (right)</span>
+          </figcaption>
+          <FlowSankey flow={sel.deterministic[Math.min(flowYear, inp.horizon)].flow} />
+          <label className="mt-2 block">
+            <span className="flex justify-between text-[11px] font-medium text-gray-600"><span>Year</span><span className="tabular-nums text-gray-500">{flowYear === 0 ? 'purchase (year 0)' : `+${flowYear} yr`}</span></span>
+            <input type="range" min={0} max={inp.horizon} step={1} value={Math.min(flowYear, inp.horizon)} onChange={(e) => setFlowYear(Number(e.target.value))} className="mt-1 w-full accent-lake-600" />
+          </label>
+          <p className="mt-1 text-[10px] text-gray-400">
+            Sources of cash (left) → where it goes (right). The SpaceX→Diversified conversion and its tax are traced exactly; the rest is shown proportionally since cash is fungible. Median path.
           </p>
         </figure>
 
