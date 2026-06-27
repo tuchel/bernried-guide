@@ -154,6 +154,9 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
   const portfolioEur = portfolioUsd / inp.eurUsd
   const houseShare = inp.housePriceEur / (portfolioEur + inp.housePriceEur)
   const d0 = sel.deterministic[0].comp // asset split at purchase (after t=0 funding + diversification)
+  const burnTotal =
+    inp.burnHouseOps + inp.burnSchooling + inp.burnChildcare + inp.burnHealth +
+    inp.burnInsurance + inp.burnAdvisory + inp.burnGeneral + inp.burnTravel
 
   return (
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
@@ -322,6 +325,10 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
             <Num label="Cross-border tax & advisory" value={inp.burnAdvisory} step={5000} suffix="€" onChange={(v) => set({ burnAdvisory: v })} />
             <Num label="General living" value={inp.burnGeneral} step={10000} suffix="€" onChange={(v) => set({ burnGeneral: v })} />
             <Num label="Travel" value={inp.burnTravel} step={5000} suffix="€" onChange={(v) => set({ burnTravel: v })} />
+            <div className="flex items-center justify-between rounded-md bg-lake-50 px-3 py-2 text-sm sm:col-span-2">
+              <span className="font-medium text-lake-900">Total living costs</span>
+              <span className="font-semibold tabular-nums text-lake-900">{fmtEur(burnTotal)}/yr <span className="font-normal text-lake-700">(€{Math.round(burnTotal / 12 / 1000)}k/mo, before {pct(inp.inflation)} inflation)</span></span>
+            </div>
             <Pct label="Inflation" value={inp.inflation} max={0.06} onChange={(v) => set({ inflation: v })} />
           </Group>
 
