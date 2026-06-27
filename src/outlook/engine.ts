@@ -60,6 +60,7 @@ export interface Inputs {
   mortgageRate: number
   sblocRate: number
   sblocMaxLtv: number
+  loanTermYears: number // amortize debt over N years (1..30); >30 = never (interest-only)
   strategy: Strategy
   hybridSellPct: number
   spacexInitialDivPct: number // one-time fraction of SpaceX sold into diversified at t=0
@@ -231,6 +232,14 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   // diversified bucket isn't immediately re-sold to cover the purchase).
   diversifySpacex(inp.spacexInitialDivPct)
 
+  // Loan amortization schedule: a constant annuity that retires each loan over loanTermYears.
+  // loanTermYears > 30 → "never" (interest-only, debt rides forever). Computed off the t=0 balances.
+  const amortize = inp.loanTermYears >= 1 && inp.loanTermYears <= 30
+  const annuity = (P: number, r: number) =>
+    amortize && P > 0 ? (r > 0 ? (P * r) / (1 - Math.pow(1 + r, -inp.loanTermYears)) : P / inp.loanTermYears) : 0
+  const mortgageAnnuity = annuity(mortgage, inp.mortgageRate)
+  const ploanAnnuity = annuity(ploan, inp.sblocRate)
+
   const rows: YearRow[] = []
   const record = (year: number, burnEur: number, marginCallEur: number) => {
     const liquidUsd = cashRef.v + holdings.reduce((s, h) => s + h.value, 0)
@@ -293,11 +302,18 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
     const burnEur =
       (inp.burnHouseOps + inp.burnSchooling + inp.burnChildcare + inp.burnHealth + inp.burnGeneral +
         inp.burnTravel + inp.burnInsurance + inp.burnAdvisory) * infl
+    // Debt service: interest on the opening balance + scheduled principal (if amortizing).
+    // Paying principal means selling more assets now (realizing tax) to kill future interest.
     const interestEur = mortgage * inp.mortgageRate + ploan * inp.sblocRate
+    const mortgagePrincipal = amortize ? Math.min(mortgage, Math.max(0, mortgageAnnuity - mortgage * inp.mortgageRate)) : 0
+    const ploanPrincipal = amortize ? Math.min(ploan, Math.max(0, ploanAnnuity - ploan * inp.sblocRate)) : 0
+    mortgage -= mortgagePrincipal
+    ploan -= ploanPrincipal
     cumInterestEur += interestEur
-    let netWorthNowEur = cashRef.v / fx + holdings.reduce((s, h) => s + h.value, 0) / fx + house - mortgage - ploan
+    const debtServiceEur = interestEur + mortgagePrincipal + ploanPrincipal
+    const netWorthNowEur = cashRef.v / fx + holdings.reduce((s, h) => s + h.value, 0) / fx + house - mortgage - ploan
     const wealthTaxEur = inp.wealthTaxRate > 0 ? Math.max(0, netWorthNowEur) * inp.wealthTaxRate : 0
-    const r = raiseNet(cashRef, holdings, (burnEur + interestEur + wealthTaxEur) * fx, inp.capGainsRate)
+    const r = raiseNet(cashRef, holdings, (burnEur + debtServiceEur + wealthTaxEur) * fx, inp.capGainsRate)
     cumTaxEur += (r.taxUsd / fx) + wealthTaxEur
     if (r.short && ruinYear === null) ruinYear = year
 

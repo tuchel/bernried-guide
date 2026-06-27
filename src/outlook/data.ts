@@ -49,6 +49,7 @@ export const DEFAULTS: Inputs = {
   mortgageRate: 0.038,
   sblocRate: 0.07,
   sblocMaxLtv: 0.4, // concentrated single-stock advance rate
+  loanTermYears: 31, // 31 = "never" (interest-only); 1..30 amortizes the debt over N years
   strategy: 'hybrid',
   hybridSellPct: 0.5,
   spacexInitialDivPct: 0,

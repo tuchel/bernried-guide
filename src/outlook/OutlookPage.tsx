@@ -314,6 +314,13 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
             <Pct label="Mortgage rate" value={inp.mortgageRate} max={0.08} onChange={(v) => set({ mortgageRate: v })} />
             <Pct label="Portfolio-loan max LTV" value={inp.sblocMaxLtv} max={0.7} onChange={(v) => set({ sblocMaxLtv: v })} />
             <Pct label="Portfolio-loan rate" value={inp.sblocRate} max={0.12} onChange={(v) => set({ sblocRate: v })} />
+            <label className="block sm:col-span-2">
+              <span className="flex justify-between text-[11px] font-medium text-gray-600">
+                <span>Loan repayment time <span className="text-gray-400">(borrow / hybrid only)</span></span>
+                <span className="tabular-nums text-gray-500">{inp.loanTermYears > 30 ? 'never — interest-only' : `pay off in ${inp.loanTermYears} yr`}</span>
+              </span>
+              <input type="range" min={1} max={31} step={1} value={inp.loanTermYears} onChange={(e) => set({ loanTermYears: Number(e.target.value) })} className="mt-1 w-full accent-lake-600" />
+            </label>
           </Group>
 
           <Group title="Living costs (€/yr)">
