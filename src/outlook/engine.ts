@@ -156,21 +156,26 @@ function gaussian(u: () => number) {
 
 // Raise `targetNetUsd` of cash: spend cash first (no gain), then sell holdings in order of least
 // taxable gain per dollar. Mutates holdings; records sources + tax into `flow`; returns short flag.
+// `onlyKey` restricts the raise to a single holding and leaves cash untouched (used at t=0 to fund
+// the purchase from SpaceX alone).
 function raiseNet(
   cashRef: { v: number },
   holdings: Holding[],
   targetNetUsd: number,
   rate: number,
   flow: YearFlow,
+  onlyKey?: HoldKey,
 ): { short: boolean } {
   let need = targetNetUsd
   if (need <= 0) return { short: false }
-  const useCash = Math.min(cashRef.v, need)
-  cashRef.v -= useCash
-  flow.cash += useCash
-  need -= useCash
+  if (!onlyKey) {
+    const useCash = Math.min(cashRef.v, need)
+    cashRef.v -= useCash
+    flow.cash += useCash
+    need -= useCash
+  }
   const order = holdings
-    .filter((h) => h.value > 1)
+    .filter((h) => h.value > 1 && (!onlyKey || h.key === onlyKey))
     .sort((x, y) => y.basis / y.value - x.basis / x.value)
   for (const h of order) {
     if (need <= 0) break
@@ -238,7 +243,7 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
   // t=0 — buy the house per strategy, then setup capex, then optional one-time diversification
   const f0 = makeFlow()
   if (inp.strategy === 'outright') {
-    if (raiseNet(cashRef, holdings, inp.housePriceEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, inp.housePriceEur * fx, inp.capGainsRate, f0, 'spacex').short) ruinYear = 0
     f0.house += inp.housePriceEur * fx
   } else if (inp.strategy === 'borrow') {
     mortgage = inp.housePriceEur * inp.mortgageLtv
@@ -246,25 +251,25 @@ export function simulatePath(inp: Inputs, stochastic: boolean, seed: number): Pa
     const portfolioEur = holdings.reduce((s, h) => s + h.value, 0) / fx
     ploan = Math.min(remEur, inp.sblocMaxLtv * portfolioEur)
     remEur -= ploan
-    if (remEur > 0 && raiseNet(cashRef, holdings, remEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    if (remEur > 0 && raiseNet(cashRef, holdings, remEur * fx, inp.capGainsRate, f0, 'spacex').short) ruinYear = 0
     f0.loan += (mortgage + ploan) * fx
     f0.house += inp.housePriceEur * fx
   } else {
     const sellEur = inp.housePriceEur * inp.hybridSellPct
-    if (raiseNet(cashRef, holdings, sellEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, sellEur * fx, inp.capGainsRate, f0, 'spacex').short) ruinYear = 0
     const borrowEur = inp.housePriceEur - sellEur
     mortgage = Math.min(borrowEur, inp.housePriceEur * inp.mortgageLtv)
     const afterMortEur = borrowEur - mortgage
     const portfolioEur = holdings.reduce((s, h) => s + h.value, 0) / fx
     ploan = Math.min(afterMortEur, inp.sblocMaxLtv * portfolioEur)
     const unfundedEur = afterMortEur - ploan
-    if (unfundedEur > 0 && raiseNet(cashRef, holdings, unfundedEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    if (unfundedEur > 0 && raiseNet(cashRef, holdings, unfundedEur * fx, inp.capGainsRate, f0, 'spacex').short) ruinYear = 0
     f0.loan += (mortgage + ploan) * fx
     f0.house += inp.housePriceEur * fx
   }
   house = inp.housePriceEur
   if (inp.setupCapexEur > 0) {
-    if (raiseNet(cashRef, holdings, inp.setupCapexEur * fx, inp.capGainsRate, f0).short) ruinYear = 0
+    if (raiseNet(cashRef, holdings, inp.setupCapexEur * fx, inp.capGainsRate, f0, 'spacex').short) ruinYear = 0
     f0.setup += inp.setupCapexEur * fx
   }
   diversifySpacex(inp.spacexInitialDivPct, f0)
