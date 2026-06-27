@@ -9,7 +9,7 @@ export const DEFAULTS: Inputs = {
   horizon: 30,
   housePriceEur: 10_000_000,
   houseGrowth: 0.02,
-  setupCapexEur: 1_000_000, // one-off furnishing / fit-out of a €10M villa
+  setupCapexEur: 250_000, // one-off furnishing / fit-out of a €10M villa
   // Holdings (USD). SpaceX treated as public/liquid per the user; price is an assumption that
   // drives everything — confirm it.
   spacexShares: 380_000,
