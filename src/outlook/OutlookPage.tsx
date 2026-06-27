@@ -65,10 +65,11 @@ function ConeChart({ mc, overlays }: { mc: McResult; overlays?: { color: string;
   )
 }
 
-// ---- Net-worth composition over time (stacked, median path) ----
+// ---- Net-worth composition over time (stacked, median path), with hover legend ----
 function CompositionChart({ rows }: { rows: YearRow[] }) {
   const W = 580, H = 230, padL = 50, padR = 14, padT = 10, padB = 24
   const F = (v: number) => (Number.isFinite(v) ? v : 0)
+  const [hover, setHover] = useState<number | null>(null)
   const years = rows.map((r) => r.year)
   const xmax = Math.max(1, years[years.length - 1] || 1)
   const layers = rows.map((r) => [r.comp.spacex, r.comp.tsla, r.comp.goog, r.comp.div, r.comp.cash, r.houseEur].map(F))
@@ -85,8 +86,59 @@ function CompositionChart({ rows }: { rows: YearRow[] }) {
   }
   const netLine = 'M' + rows.map((r, i) => `${x(years[i]).toFixed(1)},${y(totals[i] - F(r.debtEur)).toFixed(1)}`).join('L')
   const ticks = [0, 0.5, 1].map((f) => f * ymax)
+  const valOf = (r: YearRow, key: string): number => {
+    if (key === 'house') return F(r.houseEur)
+    const c = r.comp
+    return F(key === 'spacex' ? c.spacex : key === 'tsla' ? c.tsla : key === 'goog' ? c.goog : key === 'div' ? c.div : c.cash)
+  }
+  const onMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    if (rect.width <= 0) return
+    const vbX = ((e.clientX - rect.left) / rect.width) * W
+    const yr = Math.round(((vbX - padL) / (W - padL - padR)) * xmax)
+    setHover(Math.max(0, Math.min(xmax, yr)))
+  }
+
+  // hover tooltip geometry
+  let tip: React.ReactNode = null
+  if (hover != null && rows[hover]) {
+    const r = rows[hover]
+    const items = COMP.map((c) => ({ ...c, v: valOf(r, c.key) })).filter((c) => c.v > 1)
+    const nw = totals[hover] - F(r.debtEur)
+    const ttRows = [
+      ...items.map((c) => ({ label: c.label, color: c.color, v: c.v, bold: false })),
+      ...(F(r.debtEur) > 1 ? [{ label: 'Debt', color: '#b91c1c', v: -F(r.debtEur), bold: false }] : []),
+      { label: 'Net worth', color: '', v: nw, bold: true },
+    ]
+    const lh = 13.5, headerH = 15, padIn = 7, boxW = 152
+    const boxH = headerH + ttRows.length * lh + padIn
+    const hx = x(hover)
+    let boxX = hx + 12
+    if (boxX + boxW > W) boxX = hx - boxW - 12
+    boxX = Math.max(2, boxX)
+    const boxY = Math.max(2, Math.min(padT, H - boxH - 2))
+    tip = (
+      <g pointerEvents="none">
+        <line x1={hx} x2={hx} y1={padT} y2={H - padB} stroke="#6b7280" strokeWidth="1" strokeDasharray="2 2" />
+        <circle cx={hx} cy={y(nw)} r="3" fill="#111827" />
+        <rect x={boxX} y={boxY} width={boxW} height={boxH} rx="4" fill="#ffffff" stroke="#d1d5db" />
+        <text x={boxX + padIn} y={boxY + 11} fontSize="9.5" fontWeight="700" fill="#374151">{hover === 0 ? 'Now (year 0)' : `Year +${hover}`}</text>
+        {ttRows.map((row, i) => {
+          const ry = boxY + headerH + i * lh + 7
+          return (
+            <g key={row.label}>
+              {row.color && <rect x={boxX + padIn} y={ry - 6.5} width={7} height={7} rx="1" fill={row.color} />}
+              <text x={boxX + padIn + (row.color ? 11 : 0)} y={ry} fontSize="9" fontWeight={row.bold ? 700 : 400} fill={row.bold ? '#111827' : '#4b5563'}>{row.label}</text>
+              <text x={boxX + boxW - padIn} y={ry} fontSize="9" fontWeight={row.bold ? 700 : 400} fill={row.v < 0 ? '#b91c1c' : '#111827'} textAnchor="end">{fmtEur(row.v)}</text>
+            </g>
+          )
+        })}
+      </g>
+    )
+  }
+
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="auto">
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height="auto" onMouseMove={onMove} onMouseLeave={() => setHover(null)} style={{ cursor: 'crosshair' }}>
       {ticks.map((t) => (
         <g key={t}>
           <line x1={padL} x2={W - padR} y1={y(t)} y2={y(t)} stroke="#e5e7eb" />
@@ -98,6 +150,7 @@ function CompositionChart({ rows }: { rows: YearRow[] }) {
       {years.filter((yr) => yr % 5 === 0).map((yr) => (
         <text key={yr} x={x(yr)} y={H - padB + 14} fontSize="9" fill="#9ca3af" textAnchor="middle">{yr === 0 ? 'now' : `+${yr}y`}</text>
       ))}
+      {tip}
     </svg>
   )
 }
