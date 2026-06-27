@@ -8,6 +8,9 @@ const AnalysisPage = lazy(() =>
   import('./analysis/AnalysisPage').then((m) => ({ default: m.AnalysisPage })),
 )
 const CostsPage = lazy(() => import('./costs/CostsPage').then((m) => ({ default: m.CostsPage })))
+const OutlookPage = lazy(() =>
+  import('./outlook/OutlookPage').then((m) => ({ default: m.OutlookPage })),
+)
 import { FilterBar } from './components/FilterBar'
 import { DetailPanel } from './components/DetailPanel'
 import { Legend } from './components/Legend'
@@ -93,6 +96,7 @@ export default function App() {
     ...lensButtons.map((b) => ({ label: b.label, onClick: () => setLens(b.id) })),
     { label: '📊 Property analysis', onClick: () => (window.location.hash = 'analysis') },
     { label: '💶 Running costs', onClick: () => (window.location.hash = 'costs') },
+    { label: '📈 Financial outlook', onClick: () => (window.location.hash = 'outlook') },
     { label: '⚙️ Filters & map layers', onClick: () => setFiltersOpen(true) },
   ]
 
@@ -107,6 +111,13 @@ export default function App() {
     return (
       <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading running costs…</div>}>
         <CostsPage onBack={() => (window.location.hash = '')} />
+      </Suspense>
+    )
+  }
+  if (route === '#outlook') {
+    return (
+      <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading financial outlook…</div>}>
+        <OutlookPage onBack={() => (window.location.hash = '')} />
       </Suspense>
     )
   }
@@ -145,6 +156,12 @@ export default function App() {
               className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
             >
               💶 Costs
+            </button>
+            <button
+              onClick={() => (window.location.hash = 'outlook')}
+              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
+            >
+              📈 Outlook
             </button>
           </div>
 
