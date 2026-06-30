@@ -23,7 +23,7 @@ export const DEFAULTS: Inputs = {
   cashRate: 0.035,
   // Return models: μ = median annual return, σ = annual log-vol, beta = market co-movement (ρ²).
   // Single-stock medians sit below index averages by design (idiosyncratic risk + skew).
-  spacex: { mu: 0.1, sigma: 0.6, beta: 0.35 },
+  spacex: { mu: 0.08, sigma: 0.6, beta: 0.35 },
   tsla: { mu: 0.06, sigma: 0.55, beta: 0.5 },
   goog: { mu: 0.06, sigma: 0.32, beta: 0.6 },
   div: { mu: 0.04, sigma: 0.17, beta: 0.9 }, // diversified index, median, net of ~0.5%/yr fund tax drag
