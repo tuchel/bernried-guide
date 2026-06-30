@@ -1,6 +1,7 @@
 import { useDeferredValue, useMemo, useState } from 'react'
+import { PageNav } from '../components/PageNav'
 import { runStrategy, type Inputs, type McResult, type Strategy, type YearFlow, type YearRow } from './engine'
-import { ASSUMPTIONS, DEFAULTS, INTRO, SOURCES, STRATEGY_BLURB, STRATEGY_COLOR, STRATEGY_LABEL } from './data'
+import { ASSUMPTIONS, DEFAULTS, INFO, INTRO, SOURCES, STRATEGY_BLURB, STRATEGY_COLOR, STRATEGY_LABEL } from './data'
 
 function fmtEur(n: number): string {
   const a = Math.abs(n)
@@ -238,10 +239,22 @@ function FlowSankey({ flow }: { flow: YearFlow }) {
   )
 }
 
-function Num({ label, value, onChange, step = 1, suffix, hint }: { label: string; value: number; onChange: (v: number) => void; step?: number; suffix?: string; hint?: string }) {
+// Hover info-tip: a small "i" that reveals an explanation popup.
+function Info({ text }: { text: string }) {
+  return (
+    <span className="group relative ml-1 inline-flex align-middle">
+      <span className="flex h-3.5 w-3.5 cursor-help select-none items-center justify-center rounded-full border border-gray-300 text-[8px] font-bold leading-none text-gray-400 group-hover:border-lake-600 group-hover:bg-lake-600 group-hover:text-white">i</span>
+      <span role="tooltip" className="pointer-events-none absolute bottom-[150%] left-1/2 z-40 hidden w-52 -translate-x-1/2 rounded-lg bg-gray-900 px-3 py-2 text-left text-[11px] font-normal leading-snug text-white shadow-xl group-hover:block">
+        {text}
+        <span className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-gray-900" />
+      </span>
+    </span>
+  )
+}
+function Num({ label, value, onChange, step = 1, suffix, hint, info }: { label: string; value: number; onChange: (v: number) => void; step?: number; suffix?: string; hint?: string; info?: string }) {
   return (
     <label className="block">
-      <span className="text-[11px] font-medium text-gray-600">{label}{hint && <span className="ml-1 text-gray-400">{hint}</span>}</span>
+      <span className="text-[11px] font-medium text-gray-600">{label}{hint && <span className="ml-1 text-gray-400">{hint}</span>}{info && <Info text={info} />}</span>
       <div className="mt-0.5 flex items-center rounded-md border border-gray-300 bg-white px-2 focus-within:border-lake-500">
         <input type="number" value={value} step={step} onChange={(e) => onChange(e.target.value === '' ? 0 : Number(e.target.value))} className="w-full bg-transparent py-1 text-sm outline-none" />
         {suffix && <span className="text-xs text-gray-400">{suffix}</span>}
@@ -249,10 +262,10 @@ function Num({ label, value, onChange, step = 1, suffix, hint }: { label: string
     </label>
   )
 }
-function Pct({ label, value, onChange, max = 0.6, step = 0.005 }: { label: string; value: number; onChange: (v: number) => void; max?: number; step?: number }) {
+function Pct({ label, value, onChange, max = 0.6, step = 0.005, info }: { label: string; value: number; onChange: (v: number) => void; max?: number; step?: number; info?: string }) {
   return (
     <label className="block">
-      <span className="flex justify-between text-[11px] font-medium text-gray-600"><span>{label}</span><span className="tabular-nums text-gray-500">{(value * 100).toFixed(1)}%</span></span>
+      <span className="flex justify-between text-[11px] font-medium text-gray-600"><span>{label}{info && <Info text={info} />}</span><span className="tabular-nums text-gray-500">{(value * 100).toFixed(1)}%</span></span>
       <input type="range" min={0} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className="mt-1 w-full accent-lake-600" />
     </label>
   )
@@ -298,8 +311,10 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
       <header className="bg-lake-800 text-white">
+        <div className="border-b border-white/10">
+          <PageNav current="outlook" />
+        </div>
         <div className="mx-auto max-w-5xl px-4 py-6">
-          <button onClick={onBack} className="mb-3 text-xs text-lake-100 hover:text-white">← Back to the guide</button>
           <p className="text-xs font-semibold uppercase tracking-wide text-lake-200">Financial outlook</p>
           <h1 className="mt-1 text-2xl font-bold leading-tight sm:text-3xl">What does buying this house do to our future?</h1>
           <p className="mt-1 text-sm text-lake-100">A live {inp.horizon}-year simulator — outright vs. borrowing vs. hybrid, with tax, volatility, margin calls and FX</p>
@@ -406,18 +421,18 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
         <h2 className="mb-3 mt-8 text-lg font-semibold text-gray-900">Assumptions — change anything</h2>
         <div className="grid gap-3 lg:grid-cols-2">
           <Group title="House & strategy">
-            <Num label="House price (all-in)" value={inp.housePriceEur} step={250000} suffix="€" onChange={(v) => set({ housePriceEur: v })} />
-            <Num label="One-off setup / furnishing" value={inp.setupCapexEur} step={250000} suffix="€" onChange={(v) => set({ setupCapexEur: v })} />
-            <Pct label="House appreciation" value={inp.houseGrowth} max={0.06} onChange={(v) => set({ houseGrowth: v })} />
+            <Num label="House price (all-in)" info={INFO.housePrice} value={inp.housePriceEur} step={250000} suffix="€" onChange={(v) => set({ housePriceEur: v })} />
+            <Num label="One-off setup / furnishing" info={INFO.setupCapex} value={inp.setupCapexEur} step={250000} suffix="€" onChange={(v) => set({ setupCapexEur: v })} />
+            <Pct label="House appreciation" info={INFO.houseGrowth} value={inp.houseGrowth} max={0.06} onChange={(v) => set({ houseGrowth: v })} />
             <label className="block">
-              <span className="text-[11px] font-medium text-gray-600">Funding strategy (shown above)</span>
+              <span className="text-[11px] font-medium text-gray-600">Funding strategy (shown above)<Info text={INFO.strategy} /></span>
               <div className="mt-1 flex gap-1">
                 {STRATS.map((s) => <button key={s} onClick={() => setSelected(s)} className={`flex-1 rounded-md px-1.5 py-1 text-[11px] font-medium ${s === selected ? 'bg-lake-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{STRATEGY_LABEL[s]}</button>)}
               </div>
             </label>
-            <Pct label="Hybrid: share funded by selling" value={inp.hybridSellPct} max={1} onChange={(v) => set({ hybridSellPct: v })} />
-            <Pct label="Diversify SpaceX now (one-time sale)" value={inp.spacexInitialDivPct} max={1} onChange={(v) => set({ spacexInitialDivPct: v })} />
-            <Pct label="Move SpaceX → diversified / yr (de-risk)" value={inp.spacexTrimPct} max={0.25} onChange={(v) => set({ spacexTrimPct: v })} />
+            <Pct label="Hybrid: share funded by selling" info={INFO.hybridSellPct} value={inp.hybridSellPct} max={1} onChange={(v) => set({ hybridSellPct: v })} />
+            <Pct label="Diversify SpaceX now (one-time sale)" info={INFO.initialDiv} value={inp.spacexInitialDivPct} max={1} onChange={(v) => set({ spacexInitialDivPct: v })} />
+            <Pct label="Move SpaceX → diversified / yr (de-risk)" info={INFO.trim} value={inp.spacexTrimPct} max={0.25} onChange={(v) => set({ spacexTrimPct: v })} />
             {inp.spacexInitialDivPct > 0 && (
               <p className="rounded-md bg-lake-50 p-2 text-[11px] leading-snug text-lake-900 sm:col-span-2">
                 One-time sale → <strong>{fmtEur(d0.div)}</strong> now in diversified. The $0-basis sale is taxed first (~{pct(inp.capGainsRate)}), so only the after-tax amount lands there — the tax shows up in “Up-front tax to buy.” At purchase: SpaceX {fmtEur(d0.spacex)} · Diversified {fmtEur(d0.div)}.
@@ -426,50 +441,50 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
           </Group>
 
           <Group title="Holdings (USD)">
-            <Num label="SpaceX shares" value={inp.spacexShares} step={10000} onChange={(v) => set({ spacexShares: v })} />
-            <Num label="SpaceX $/share" value={inp.spacexPrice} step={10} suffix="$" onChange={(v) => set({ spacexPrice: v })} />
-            <Num label="SpaceX basis $/share" value={inp.spacexBasisPerShare} step={5} suffix="$" onChange={(v) => set({ spacexBasisPerShare: v })} />
-            <Num label="Cash" value={inp.cashUsd} step={50000} suffix="$" onChange={(v) => set({ cashUsd: v })} />
-            <Num label="TSLA value" value={inp.tslaValue} step={50000} suffix="$" onChange={(v) => set({ tslaValue: v })} />
-            <Num label="TSLA cost basis" value={inp.tslaBasis} step={50000} suffix="$" onChange={(v) => set({ tslaBasis: v })} />
-            <Num label="GOOG value" value={inp.googValue} step={25000} suffix="$" onChange={(v) => set({ googValue: v })} />
-            <Num label="GOOG cost basis" value={inp.googBasis} step={25000} suffix="$" onChange={(v) => set({ googBasis: v })} />
+            <Num label="SpaceX shares" info={INFO.spacexShares} value={inp.spacexShares} step={10000} onChange={(v) => set({ spacexShares: v })} />
+            <Num label="SpaceX $/share" info={INFO.spacexPrice} value={inp.spacexPrice} step={10} suffix="$" onChange={(v) => set({ spacexPrice: v })} />
+            <Num label="SpaceX basis $/share" info={INFO.spacexBasis} value={inp.spacexBasisPerShare} step={5} suffix="$" onChange={(v) => set({ spacexBasisPerShare: v })} />
+            <Num label="Cash" info={INFO.cash} value={inp.cashUsd} step={50000} suffix="$" onChange={(v) => set({ cashUsd: v })} />
+            <Num label="TSLA value" info={INFO.tslaValue} value={inp.tslaValue} step={50000} suffix="$" onChange={(v) => set({ tslaValue: v })} />
+            <Num label="TSLA cost basis" info={INFO.tslaBasis} value={inp.tslaBasis} step={50000} suffix="$" onChange={(v) => set({ tslaBasis: v })} />
+            <Num label="GOOG value" info={INFO.googValue} value={inp.googValue} step={25000} suffix="$" onChange={(v) => set({ googValue: v })} />
+            <Num label="GOOG cost basis" info={INFO.googBasis} value={inp.googBasis} step={25000} suffix="$" onChange={(v) => set({ googBasis: v })} />
           </Group>
 
           <Group title="Growth & volatility" cols={3} note="μ is the TYPICAL (median) annual return — single stocks sit below the index on purpose. Co-move = correlation² to the market (0–1).">
-            <Pct label="SpaceX median return" value={inp.spacex.mu} max={0.2} onChange={(v) => setAsset('spacex', { mu: v })} />
-            <Pct label="SpaceX vol" value={inp.spacex.sigma} max={0.9} onChange={(v) => setAsset('spacex', { sigma: v })} />
-            <Pct label="SpaceX mkt co-move" value={inp.spacex.beta} max={1} onChange={(v) => setAsset('spacex', { beta: v })} />
-            <Pct label="TSLA median return" value={inp.tsla.mu} max={0.2} onChange={(v) => setAsset('tsla', { mu: v })} />
-            <Pct label="TSLA vol" value={inp.tsla.sigma} max={0.9} onChange={(v) => setAsset('tsla', { sigma: v })} />
-            <Pct label="TSLA mkt co-move" value={inp.tsla.beta} max={1} onChange={(v) => setAsset('tsla', { beta: v })} />
-            <Pct label="GOOG median return" value={inp.goog.mu} max={0.2} onChange={(v) => setAsset('goog', { mu: v })} />
-            <Pct label="GOOG vol" value={inp.goog.sigma} max={0.9} onChange={(v) => setAsset('goog', { sigma: v })} />
-            <Pct label="GOOG mkt co-move" value={inp.goog.beta} max={1} onChange={(v) => setAsset('goog', { beta: v })} />
-            <Pct label="Diversified return" value={inp.div.mu} max={0.12} onChange={(v) => setAsset('div', { mu: v })} />
-            <Pct label="Diversified vol" value={inp.div.sigma} max={0.4} onChange={(v) => setAsset('div', { sigma: v })} />
-            <Pct label="Cash yield" value={inp.cashRate} max={0.08} onChange={(v) => set({ cashRate: v })} />
+            <Pct label="SpaceX median return" info={INFO.mu} value={inp.spacex.mu} max={0.2} onChange={(v) => setAsset('spacex', { mu: v })} />
+            <Pct label="SpaceX vol" info={INFO.sigma} value={inp.spacex.sigma} max={0.9} onChange={(v) => setAsset('spacex', { sigma: v })} />
+            <Pct label="SpaceX mkt co-move" info={INFO.beta} value={inp.spacex.beta} max={1} onChange={(v) => setAsset('spacex', { beta: v })} />
+            <Pct label="TSLA median return" info={INFO.mu} value={inp.tsla.mu} max={0.2} onChange={(v) => setAsset('tsla', { mu: v })} />
+            <Pct label="TSLA vol" info={INFO.sigma} value={inp.tsla.sigma} max={0.9} onChange={(v) => setAsset('tsla', { sigma: v })} />
+            <Pct label="TSLA mkt co-move" info={INFO.beta} value={inp.tsla.beta} max={1} onChange={(v) => setAsset('tsla', { beta: v })} />
+            <Pct label="GOOG median return" info={INFO.mu} value={inp.goog.mu} max={0.2} onChange={(v) => setAsset('goog', { mu: v })} />
+            <Pct label="GOOG vol" info={INFO.sigma} value={inp.goog.sigma} max={0.9} onChange={(v) => setAsset('goog', { sigma: v })} />
+            <Pct label="GOOG mkt co-move" info={INFO.beta} value={inp.goog.beta} max={1} onChange={(v) => setAsset('goog', { beta: v })} />
+            <Pct label="Diversified return" info={INFO.divMu} value={inp.div.mu} max={0.12} onChange={(v) => setAsset('div', { mu: v })} />
+            <Pct label="Diversified vol" info={INFO.divSigma} value={inp.div.sigma} max={0.4} onChange={(v) => setAsset('div', { sigma: v })} />
+            <Pct label="Cash yield" info={INFO.cashRate} value={inp.cashRate} max={0.08} onChange={(v) => set({ cashRate: v })} />
           </Group>
 
           <Group title="Risk model" note="Mean reversion caps long-horizon dispersion (0 = raw random walk, much wider tails). Impairment = the chance SpaceX permanently craters — the one risk a bell curve can't show.">
-            <Pct label="Mean reversion" value={inp.meanReversion} max={0.3} onChange={(v) => set({ meanReversion: v })} />
-            <Pct label="SpaceX impairment / yr" value={inp.impairProb} max={0.05} step={0.0025} onChange={(v) => set({ impairProb: v })} />
-            <Pct label="…drops to" value={inp.impairTo} max={1} onChange={(v) => set({ impairTo: v })} />
-            <Pct label="Wealth-tax scenario" value={inp.wealthTaxRate} max={0.02} step={0.0025} onChange={(v) => set({ wealthTaxRate: v })} />
+            <Pct label="Mean reversion" info={INFO.meanReversion} value={inp.meanReversion} max={0.3} onChange={(v) => set({ meanReversion: v })} />
+            <Pct label="SpaceX impairment / yr" info={INFO.impairProb} value={inp.impairProb} max={0.05} step={0.0025} onChange={(v) => set({ impairProb: v })} />
+            <Pct label="…drops to" info={INFO.impairTo} value={inp.impairTo} max={1} onChange={(v) => set({ impairTo: v })} />
+            <Pct label="Wealth-tax scenario" info={INFO.wealthTax} value={inp.wealthTaxRate} max={0.02} step={0.0025} onChange={(v) => set({ wealthTaxRate: v })} />
           </Group>
 
           <Group title="Tax, FX & loans">
-            <Pct label="Cap-gains rate (DE 26.4% +NIIT = 30.2%)" value={inp.capGainsRate} max={0.4} onChange={(v) => set({ capGainsRate: v })} />
-            <Num label="EUR/USD (USD per €)" value={inp.eurUsd} step={0.01} onChange={(v) => set({ eurUsd: v })} />
-            <Pct label="EUR/USD volatility" value={inp.fxVol} max={0.2} onChange={(v) => set({ fxVol: v })} />
-            <Pct label="EUR drift vs USD" value={inp.fxDrift} max={0.04} onChange={(v) => set({ fxDrift: v })} />
-            <Pct label="Mortgage LTV" value={inp.mortgageLtv} max={0.8} onChange={(v) => set({ mortgageLtv: v })} />
-            <Pct label="Mortgage rate" value={inp.mortgageRate} max={0.08} onChange={(v) => set({ mortgageRate: v })} />
-            <Pct label="Portfolio-loan max LTV" value={inp.sblocMaxLtv} max={0.7} onChange={(v) => set({ sblocMaxLtv: v })} />
-            <Pct label="Portfolio-loan rate" value={inp.sblocRate} max={0.12} onChange={(v) => set({ sblocRate: v })} />
+            <Pct label="Cap-gains rate (DE 26.4% +NIIT = 30.2%)" info={INFO.capGains} value={inp.capGainsRate} max={0.4} onChange={(v) => set({ capGainsRate: v })} />
+            <Num label="EUR/USD (USD per €)" info={INFO.eurUsd} value={inp.eurUsd} step={0.01} onChange={(v) => set({ eurUsd: v })} />
+            <Pct label="EUR/USD volatility" info={INFO.fxVol} value={inp.fxVol} max={0.2} onChange={(v) => set({ fxVol: v })} />
+            <Pct label="EUR drift vs USD" info={INFO.fxDrift} value={inp.fxDrift} max={0.04} onChange={(v) => set({ fxDrift: v })} />
+            <Pct label="Mortgage LTV" info={INFO.mortgageLtv} value={inp.mortgageLtv} max={0.8} onChange={(v) => set({ mortgageLtv: v })} />
+            <Pct label="Mortgage rate" info={INFO.mortgageRate} value={inp.mortgageRate} max={0.08} onChange={(v) => set({ mortgageRate: v })} />
+            <Pct label="Portfolio-loan max LTV" info={INFO.sblocLtv} value={inp.sblocMaxLtv} max={0.7} onChange={(v) => set({ sblocMaxLtv: v })} />
+            <Pct label="Portfolio-loan rate" info={INFO.sblocRate} value={inp.sblocRate} max={0.12} onChange={(v) => set({ sblocRate: v })} />
             <label className="block sm:col-span-2">
               <span className="flex justify-between text-[11px] font-medium text-gray-600">
-                <span>Loan repayment time <span className="text-gray-400">(borrow / hybrid only)</span></span>
+                <span>Loan repayment time <span className="text-gray-400">(borrow / hybrid only)</span><Info text={INFO.loanTerm} /></span>
                 <span className="tabular-nums text-gray-500">{inp.loanTermYears > 30 ? 'never — interest-only' : `pay off in ${inp.loanTermYears} yr`}</span>
               </span>
               <input type="range" min={1} max={31} step={1} value={inp.loanTermYears} onChange={(e) => set({ loanTermYears: Number(e.target.value) })} className="mt-1 w-full accent-lake-600" />
@@ -477,24 +492,24 @@ export function OutlookPage({ onBack }: { onBack: () => void }) {
           </Group>
 
           <Group title="Living costs (€/yr)">
-            <Num label="House running costs" value={inp.burnHouseOps} step={5000} suffix="€" onChange={(v) => set({ burnHouseOps: v })} />
-            <Num label="Schooling" value={inp.burnSchooling} step={5000} suffix="€" onChange={(v) => set({ burnSchooling: v })} />
-            <Num label="Childcare / nanny" value={inp.burnChildcare} step={5000} suffix="€" onChange={(v) => set({ burnChildcare: v })} />
-            <Num label="Health insurance" value={inp.burnHealth} step={2500} suffix="€" onChange={(v) => set({ burnHealth: v })} />
-            <Num label="Property/liability insurance" value={inp.burnInsurance} step={5000} suffix="€" onChange={(v) => set({ burnInsurance: v })} />
-            <Num label="Cross-border tax & advisory" value={inp.burnAdvisory} step={5000} suffix="€" onChange={(v) => set({ burnAdvisory: v })} />
-            <Num label="General living" value={inp.burnGeneral} step={10000} suffix="€" onChange={(v) => set({ burnGeneral: v })} />
-            <Num label="Travel" value={inp.burnTravel} step={5000} suffix="€" onChange={(v) => set({ burnTravel: v })} />
+            <Num label="House running costs" info={INFO.burnHouseOps} value={inp.burnHouseOps} step={5000} suffix="€" onChange={(v) => set({ burnHouseOps: v })} />
+            <Num label="Schooling" info={INFO.burnSchooling} value={inp.burnSchooling} step={5000} suffix="€" onChange={(v) => set({ burnSchooling: v })} />
+            <Num label="Childcare / nanny" info={INFO.burnChildcare} value={inp.burnChildcare} step={5000} suffix="€" onChange={(v) => set({ burnChildcare: v })} />
+            <Num label="Health insurance" info={INFO.burnHealth} value={inp.burnHealth} step={2500} suffix="€" onChange={(v) => set({ burnHealth: v })} />
+            <Num label="Property/liability insurance" info={INFO.burnInsurance} value={inp.burnInsurance} step={5000} suffix="€" onChange={(v) => set({ burnInsurance: v })} />
+            <Num label="Cross-border tax & advisory" info={INFO.burnAdvisory} value={inp.burnAdvisory} step={5000} suffix="€" onChange={(v) => set({ burnAdvisory: v })} />
+            <Num label="General living" info={INFO.burnGeneral} value={inp.burnGeneral} step={10000} suffix="€" onChange={(v) => set({ burnGeneral: v })} />
+            <Num label="Travel" info={INFO.burnTravel} value={inp.burnTravel} step={5000} suffix="€" onChange={(v) => set({ burnTravel: v })} />
             <div className="flex items-center justify-between rounded-md bg-lake-50 px-3 py-2 text-sm sm:col-span-2">
               <span className="font-medium text-lake-900">Total living costs</span>
               <span className="font-semibold tabular-nums text-lake-900">{fmtEur(burnTotal)}/yr <span className="font-normal text-lake-700">(€{Math.round(burnTotal / 12 / 1000)}k/mo, before {pct(inp.inflation)} inflation)</span></span>
             </div>
-            <Pct label="Inflation" value={inp.inflation} max={0.06} onChange={(v) => set({ inflation: v })} />
+            <Pct label="Inflation" info={INFO.inflation} value={inp.inflation} max={0.06} onChange={(v) => set({ inflation: v })} />
           </Group>
 
           <Group title="Simulation">
-            <Num label="Horizon (years)" value={inp.horizon} step={1} onChange={(v) => set({ horizon: Math.max(5, Math.min(50, Math.round(v))) })} />
-            <Num label="Monte Carlo paths" value={inp.mcPaths} step={500} onChange={(v) => set({ mcPaths: Math.max(200, Math.min(8000, Math.round(v))) })} />
+            <Num label="Horizon (years)" info={INFO.horizon} value={inp.horizon} step={1} onChange={(v) => set({ horizon: Math.max(5, Math.min(50, Math.round(v))) })} />
+            <Num label="Monte Carlo paths" info={INFO.mcPaths} value={inp.mcPaths} step={500} onChange={(v) => set({ mcPaths: Math.max(200, Math.min(8000, Math.round(v))) })} />
             <button onClick={() => setInp(DEFAULTS)} className="rounded-md bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-200 sm:col-span-2">↺ Reset to defaults</button>
           </Group>
         </div>

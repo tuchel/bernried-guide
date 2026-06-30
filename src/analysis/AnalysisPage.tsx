@@ -1,3 +1,4 @@
+import { PageNav } from '../components/PageNav'
 import { BenchmarkBars, CompsBars, PositioningBar, TrendLine } from './Charts'
 import {
   COMPS,
@@ -44,10 +45,10 @@ export function AnalysisPage({ onBack }: { onBack: () => void }) {
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
       {/* Hero */}
       <header className="bg-lake-800 text-white">
+        <div className="border-b border-white/10">
+          <PageNav current="analysis" />
+        </div>
         <div className="mx-auto max-w-3xl px-4 py-6">
-          <button onClick={onBack} className="mb-3 text-xs text-lake-100 hover:text-white">
-            ← Back to the guide
-          </button>
           <p className="text-xs font-semibold uppercase tracking-wide text-lake-200">Real estate analysis</p>
           <h1 className="mt-1 text-2xl font-bold leading-tight sm:text-3xl">
             Reitweg 25 — is €9.75M the right price?

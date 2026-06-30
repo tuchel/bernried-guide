@@ -15,8 +15,9 @@ import { FilterBar } from './components/FilterBar'
 import { DetailPanel } from './components/DetailPanel'
 import { Legend } from './components/Legend'
 import { LensPanel, type LensId } from './components/LensPanel'
+import { PageNav } from './components/PageNav'
 import { usePlaces } from './lib/data'
-import { CATEGORIES, GOOGLE_MAPS_API_KEY, HOME } from './config'
+import { CATEGORIES, GOOGLE_MAPS_API_KEY } from './config'
 import type { Band, CategoryId, TransportMode } from './types'
 
 const DEFAULT_ON: CategoryId[] = (Object.keys(CATEGORIES) as CategoryId[]).filter(
@@ -34,7 +35,6 @@ export default function App() {
   const [bands, setBands] = useState<Set<Band>>(() => new Set<Band>([5, 10, 15, 30, 45, 60]))
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
   const [lens, setLens] = useState<LensId | null>(null)
 
   const hasGoogle = Boolean(GOOGLE_MAPS_API_KEY)
@@ -91,15 +91,6 @@ export default function App() {
     { id: 'family', label: '👨‍👩‍👧 Family' },
   ]
 
-  // One flat list of every nav action — rendered in the mobile hamburger menu.
-  const menuItems: { label: string; onClick: () => void }[] = [
-    ...lensButtons.map((b) => ({ label: b.label, onClick: () => setLens(b.id) })),
-    { label: '📊 Property analysis', onClick: () => (window.location.hash = 'analysis') },
-    { label: '💶 Running costs', onClick: () => (window.location.hash = 'costs') },
-    { label: '📈 Financial outlook', onClick: () => (window.location.hash = 'outlook') },
-    { label: '⚙️ Filters & map layers', onClick: () => setFiltersOpen(true) },
-  ]
-
   if (route === '#analysis') {
     return (
       <Suspense fallback={<div className="p-8 text-sm text-gray-500">Loading analysis…</div>}>
@@ -125,98 +116,25 @@ export default function App() {
   const ui = (
     <div className="flex h-full flex-col">
       <header className="z-20 border-b border-black/10 bg-lake-800 text-white shadow-sm">
-        <div className="flex items-center justify-between gap-3 px-4 py-2.5">
-          <div className="min-w-0">
-            <h1 className="truncate text-base font-semibold leading-tight sm:text-lg">
-              Bernried · a family guide to the Starnberger See
-            </h1>
-            <p className="hidden text-xs text-lake-100 sm:block">
-              Everyday life & adventures around {HOME.address}
-            </p>
-          </div>
-          {/* Desktop: inline nav (filter sidebar is visible separately at lg+) */}
-          <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
-            {lensButtons.map((b) => (
-              <button
-                key={b.id}
-                onClick={() => setLens(b.id)}
-                className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium hover:bg-white/20"
-              >
-                {b.label}
-              </button>
-            ))}
+        <PageNav current="" />
+        {/* Guide-specific controls: map lenses + (mobile) filter access */}
+        <div className="flex items-center gap-1.5 overflow-x-auto border-t border-white/10 px-4 py-1.5">
+          <span className="hidden shrink-0 text-[11px] font-medium text-lake-200 sm:inline">Map lenses</span>
+          {lensButtons.map((b) => (
             <button
-              onClick={() => (window.location.hash = 'analysis')}
-              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
+              key={b.id}
+              onClick={() => setLens(b.id)}
+              className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium hover:bg-white/20"
             >
-              📊 Analysis
+              {b.label}
             </button>
-            <button
-              onClick={() => (window.location.hash = 'costs')}
-              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
-            >
-              💶 Costs
-            </button>
-            <button
-              onClick={() => (window.location.hash = 'outlook')}
-              className="rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium hover:bg-white/30"
-            >
-              📈 Outlook
-            </button>
-          </div>
-
-          {/* Mobile / tablet: hamburger menu */}
-          <div className="relative shrink-0 lg:hidden">
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Menu"
-              aria-expanded={menuOpen}
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 hover:bg-white/20"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                {menuOpen ? (
-                  <>
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                  </>
-                ) : (
-                  <>
-                    <line x1="3" y1="6" x2="21" y2="6" />
-                    <line x1="3" y1="12" x2="21" y2="12" />
-                    <line x1="3" y1="18" x2="21" y2="18" />
-                  </>
-                )}
-              </svg>
-            </button>
-
-            {menuOpen && (
-              <>
-                <div className="fixed inset-0 z-30" onClick={() => setMenuOpen(false)} />
-                <div className="absolute right-0 top-full z-40 mt-2 w-60 overflow-hidden rounded-xl bg-white py-1 text-gray-800 shadow-2xl ring-1 ring-black/10">
-                  {menuItems.map((m) => (
-                    <button
-                      key={m.label}
-                      onClick={() => {
-                        m.onClick()
-                        setMenuOpen(false)
-                      }}
-                      className="block w-full px-4 py-2.5 text-left text-sm font-medium hover:bg-lake-50"
-                    >
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          ))}
+          <button
+            onClick={() => setFiltersOpen(true)}
+            className="shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium hover:bg-white/20 lg:hidden"
+          >
+            ⚙️ Filters
+          </button>
         </div>
       </header>
 

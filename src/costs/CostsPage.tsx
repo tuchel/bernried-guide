@@ -1,3 +1,4 @@
+import { PageNav } from '../components/PageNav'
 import {
   ASSUMPTIONS,
   COSTS,
@@ -81,8 +82,10 @@ export function CostsPage({ onBack }: { onBack: () => void }) {
   return (
     <div className="h-full overflow-y-auto bg-[#f6f7f5]">
       <header className="bg-lake-800 text-white">
+        <div className="border-b border-white/10">
+          <PageNav current="costs" />
+        </div>
         <div className="mx-auto max-w-3xl px-4 py-6">
-          <button onClick={onBack} className="mb-3 text-xs text-lake-100 hover:text-white">← Back to the guide</button>
           <p className="text-xs font-semibold uppercase tracking-wide text-lake-200">Running costs</p>
           <h1 className="mt-1 text-2xl font-bold leading-tight sm:text-3xl">What does it cost to run this house?</h1>
           <p className="mt-1 text-sm text-lake-100">The owner's actual operating-cost statement for Reitweg 25, annualized</p>
