@@ -12,7 +12,7 @@ export const DEFAULTS: Inputs = {
   setupCapexEur: 250_000, // one-off furnishing / fit-out of a €10M villa
   // Holdings (USD). SpaceX treated as public/liquid per the user; price is an assumption that
   // drives everything — confirm it.
-  spacexShares: 380_000,
+  spacexShares: 350_000,
   spacexPrice: 165,
   spacexBasisPerShare: 0,
   tslaValue: 700_000,
