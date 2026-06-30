@@ -13,7 +13,7 @@ export const DEFAULTS: Inputs = {
   // Holdings (USD). SpaceX treated as public/liquid per the user; price is an assumption that
   // drives everything — confirm it.
   spacexShares: 380_000,
-  spacexPrice: 150,
+  spacexPrice: 165,
   spacexBasisPerShare: 0,
   tslaValue: 700_000,
   tslaBasis: 350_000,
